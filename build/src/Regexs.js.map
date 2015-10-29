@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../develop/src/Regexs.js"],"names":[],"mappings":";;;;;;;;;;0BAAuB,cAAc;;;;AAErC,IAAI,MAAM,uBACL,wBAAW,KAAK,EAAG,uBAAuB,CAC9C,CAAA;;qBAEc,MAAM","file":"Regexs.js","sourcesContent":["import RegexNames from './RegexNames';\n\nlet regexs = {\n    [RegexNames.ARRAY]: /^[\\[][\\w,;_ ]*[\\]]$/gi\n}\n\nexport default regexs;\n\n"]}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../develop/src/RegexNames.js"],"names":[],"mappings":";;;;;AAAA,IAAI,KAAK,GACT;AACI,SAAK,EAAC,OAAO;CAChB,CAAA;;qBAEc,KAAK","file":"RegexNames.js","sourcesContent":["let names =\n{\n    ARRAY:'array'\n}\n\nexport default names;"]}

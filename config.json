@@ -1,0 +1,12 @@
+{
+  "backupDir": "output/",
+  "encoding": "utf8",
+  "spreadsheetTest": "1ysXgX70c56Zx7IPcQ0lBtqurYfB636kJETZRPK0GZUM",
+  "googleauth": {
+    "private_key_id": "XXXXX",
+    "private_key": "XXXXXX",
+    "client_email": "XXXXXX",
+    "client_id": "XXXXXX",
+    "type": "service_account"
+  }
+}
