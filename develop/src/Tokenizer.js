@@ -9,12 +9,17 @@ class Tokenizer {
     }
 
     parse(element) {
-       return Object.keys(Regexs).
+       let parsed = Object.keys(Regexs).
                             map(this.discoverRegex.bind(this, element, Regexs)).
                             filter(regexElement => typeof regexElement !== 'undefined').
                             map(this.parseElementByRegex.bind(this));
 
+        if(parsed.length === 0)
+        {
+            console.log(`No regex found for ${element}`);
+        }
 
+      return parsed[0];
     }
 
     discoverRegex(element, regexs, regexName) {
@@ -23,6 +28,7 @@ class Tokenizer {
             return {regexName, element};
         }
 
+        return {element};
     }
 
     parseElementByRegex(regexElementCouple)
@@ -32,6 +38,9 @@ class Tokenizer {
         {
             case RegexNames.ARRAY:
                 result = Parsers.toArray(regexElementCouple.element);
+                break;
+            default:
+                result = regexElementCouple.element;
                 break;
         }
 

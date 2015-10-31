@@ -16,9 +16,38 @@ var Parsers = (function () {
     _createClass(Parsers, null, [{
         key: 'toArray',
         value: function toArray(str) {
-            str = str.substring(1, str.length).split(',');
+            str = str.substring(1, str.length - 1).split(',');
 
             return str;
+        }
+    }, {
+        key: 'deepen',
+        value: function deepen(namespace, value, parsed) {
+            var t, parts, part;
+            t = parsed;
+            parts = namespace.split('.');
+
+            while (parts.length) {
+                part = parts.shift();
+                if (!parts.length) {
+                    t = t[part] = value;
+                } else {
+                    t = t[part] = t[part] || {};
+                }
+            }
+            return parsed;
+        }
+    }, {
+        key: 'camelize',
+        value: function camelize(str) {
+            return str.replace(/-(.)/g, function (match, group1) {
+                return group1.toUpperCase();
+            });
+        }
+    }, {
+        key: 'cleanSpaces',
+        value: function cleanSpaces(str) {
+            return str.replace(/\s+/g, '');
         }
     }]);
 

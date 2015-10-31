@@ -1,4 +1,4 @@
-var UtilParser = require('./parser/UtilParser');
+import Parsers from './Parsers';
 var config = require('../../config');
 var GoogleSpreadsheet = require("google-spreadsheet");
 var Promise = require('native-or-bluebird');
@@ -64,13 +64,13 @@ SpreadsheetController.prototype.filter = function (rows, clean) {
                 let filteredKey = '';
                 if(key.indexOf('locale') === -1)
                 {
-                    filteredKey = UtilParser.camelize(UtilParser.cleanSpaces(key));
+                    filteredKey = Parsers.camelize(Parsers.cleanSpaces(key));
                 }
                 else
                 {
-                    filteredKey = UtilParser.cleanSpaces(key);
+                    filteredKey = Parsers.cleanSpaces(key);
                 }
-                filteredRow[filteredKey] = clean ? UtilParser.cleanSpaces(rows[i][key]) : rows[i][key];
+                filteredRow[filteredKey] = clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
             }
         }
 

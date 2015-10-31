@@ -30,9 +30,15 @@ var Tokenizer = (function () {
     _createClass(Tokenizer, [{
         key: 'parse',
         value: function parse(element) {
-            return Object.keys(_Regexs2['default']).map(this.discoverRegex.bind(this, element, _Regexs2['default'])).filter(function (regexElement) {
+            var parsed = Object.keys(_Regexs2['default']).map(this.discoverRegex.bind(this, element, _Regexs2['default'])).filter(function (regexElement) {
                 return typeof regexElement !== 'undefined';
             }).map(this.parseElementByRegex.bind(this));
+
+            if (parsed.length === 0) {
+                console.log('No regex found for ' + element);
+            }
+
+            return parsed[0];
         }
     }, {
         key: 'discoverRegex',
@@ -40,6 +46,8 @@ var Tokenizer = (function () {
             if (element.match(regexs[regexName])) {
                 return { regexName: regexName, element: element };
             }
+
+            return { element: element };
         }
     }, {
         key: 'parseElementByRegex',
@@ -48,6 +56,9 @@ var Tokenizer = (function () {
             switch (regexElementCouple.regexName) {
                 case _RegexNames2['default'].ARRAY:
                     result = _Parsers2['default'].toArray(regexElementCouple.element);
+                    break;
+                default:
+                    result = regexElementCouple.element;
                     break;
             }
 

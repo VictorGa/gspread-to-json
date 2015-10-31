@@ -1,10 +1,15 @@
 'use strict';
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var UtilParser = require('./parser/UtilParser');
+var _Parsers = require('./Parsers');
+
+var _Parsers2 = _interopRequireDefault(_Parsers);
+
 var config = require('../../config');
 var GoogleSpreadsheet = require("google-spreadsheet");
 var Promise = require('native-or-bluebird');
@@ -69,11 +74,11 @@ SpreadsheetController.prototype.filter = function (rows, clean) {
             if (rows[i].hasOwnProperty(key) && this._incompatibleTags.indexOf(key) === -1) {
                 var filteredKey = '';
                 if (key.indexOf('locale') === -1) {
-                    filteredKey = UtilParser.camelize(UtilParser.cleanSpaces(key));
+                    filteredKey = _Parsers2['default'].camelize(_Parsers2['default'].cleanSpaces(key));
                 } else {
-                    filteredKey = UtilParser.cleanSpaces(key);
+                    filteredKey = _Parsers2['default'].cleanSpaces(key);
                 }
-                filteredRow[filteredKey] = clean ? UtilParser.cleanSpaces(rows[i][key]) : rows[i][key];
+                filteredRow[filteredKey] = clean ? _Parsers2['default'].cleanSpaces(rows[i][key]) : rows[i][key];
             }
         }
 
