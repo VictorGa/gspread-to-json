@@ -1,4 +1,9 @@
 'use strict';
+import Parsers from './Parsers';
+import {parse} from './Tokenizer';
+
+const dictKey = '__dict';
+const objParseKey = '__obj_parse';
 
 export function parseRow(row)
 {
@@ -6,7 +11,7 @@ export function parseRow(row)
 	let parsed = {};
 	Object.keys(row).forEach(key =>
 	{
-		parsed[key] = tokenizer.parse(row[key]);
+		parsed[key] = parse(row[key]);
 	});
 
 	return parsed;
@@ -21,7 +26,11 @@ export function convertRowToDict(parent, row)
 
 		parent[row.id] = clone;
 	}
+}
 
+export function convertRowToObject(parent, row, value)
+{
+	console.log('>> obj', row)
 }
 
 export function parseTab(spreadsheet, tab)
@@ -29,17 +38,19 @@ export function parseTab(spreadsheet, tab)
 	let isDict = tab.indexOf(dictKey) !== -1;
 	let isObjParse = tab.indexOf(objParseKey) !== -1;
 	let rows;
+
+	//In case is a object should be deepened
+	//Just couples of id-copy
 	if(isObjParse)
 	{
-		//Parse with deepen
-		rows = [];
-		console.log(spreadsheet[tab]);
+		rows = {};
+		spreadsheet[tab].forEach(row => Parsers.deepen(row.id, row.value, rows));
 	}
 	else
 	{
 		rows = spreadsheet[tab].map(row => parseRow(row));
 	}
-
+	console.log(rows);
 
 	return {[tab]: {rows, isDict, isObjParse}};
 }

@@ -8,27 +8,18 @@ var _srcSpreadsheetController = require('./src/SpreadsheetController');
 
 var _srcSpreadsheetController2 = _interopRequireDefault(_srcSpreadsheetController);
 
-var _srcTokenizer = require('./src/Tokenizer');
-
-var _srcTokenizer2 = _interopRequireDefault(_srcTokenizer);
-
 var _srcRelationParser = require('./src/RelationParser');
 
 var _srcTabUtils = require('./src/TabUtils');
 
 require("babel-core/polyfill");
-
-var FileWriter = require('./src/FileWriter');
 var config = require('../config.json');
 var fs = require('fs');
 var colors = require('colors');
 var Promise = require('native-or-bluebird');
 
-var tokenizer = new _srcTokenizer2['default']();
 var invalidMediaProps = ['id', 'title'];
 var relationKey = '__relation__';
-var dictKey = '__dict';
-var objParseKey = '__obj_parse';
 
 var Main = function Main() {
     var _this = this;
@@ -42,7 +33,7 @@ var Main = function Main() {
             //Get relations if exists
             var relations = undefined;
             var tabKeys = Object.keys(spreadsheet);
-            console.log(tabKeys);
+
             if (tabKeys.includes(relationKey)) {
                 relations = (0, _srcRelationParser.parseRelations)(spreadsheet[relationKey]);
 

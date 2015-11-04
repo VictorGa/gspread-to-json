@@ -6,11 +6,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var colors = require('colors');
 
-function FileWriter(){
-
-}
-
-FileWriter.write = function(fileName, data, base)
+export function write(fileName, data, base)
 {
 	if (base === void 0) { base = config.savePath; }
 
@@ -27,6 +23,4 @@ FileWriter.write = function(fileName, data, base)
 		}
 	})
 }
-
-module.exports = FileWriter;
 

@@ -1,22 +1,15 @@
 require("babel-core/polyfill");
-
-import {default as SpreadsheetController, fecthSpreadsheet}  from './src/SpreadsheetController';
-
-var FileWriter = require('./src/FileWriter');
 var config = require('../config.json');
 var fs = require('fs');
 var colors = require('colors');
 var Promise = require('native-or-bluebird');
 
-import Tokenizer from './src/Tokenizer';
+import {default as SpreadsheetController, fecthSpreadsheet}  from './src/SpreadsheetController';
 import {parseRelations,applyRelations} from './src/RelationParser';
 import {parseTab, parseRow, convertRowToDict} from './src/TabUtils';
 
-let tokenizer = new Tokenizer();
 let invalidMediaProps = ['id', 'title'];
 const relationKey = '__relation__';
-const dictKey = '__dict';
-const objParseKey = '__obj_parse';
 
 var Main = function () {
 
@@ -29,7 +22,7 @@ var Main = function () {
             //Get relations if exists
             let relations;
             let tabKeys = Object.keys(spreadsheet);
-            console.log(tabKeys);
+
             if (tabKeys.includes(relationKey)) {
                 relations = parseRelations(spreadsheet[relationKey]);
 
@@ -57,7 +50,6 @@ var Main = function () {
                     rows.forEach(convertRowToDict.bind(this, dict));
                     parsedTabs[tabName] = dict;
                 }
-
                 else
                 {
                     parsedTabs[tabName] = rows;
