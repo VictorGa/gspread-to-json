@@ -43,7 +43,7 @@ var Tokenizer = (function () {
     }, {
         key: 'discoverRegex',
         value: function discoverRegex(element, regexs, regexName) {
-            if (element.match(regexs[regexName])) {
+            if (element.match(regexs[regexName].regex)) {
                 return { regexName: regexName, element: element };
             }
 
@@ -52,14 +52,9 @@ var Tokenizer = (function () {
     }, {
         key: 'parseElementByRegex',
         value: function parseElementByRegex(regexElementCouple) {
-            var result = undefined;
-            switch (regexElementCouple.regexName) {
-                case _RegexNames2['default'].ARRAY:
-                    result = _Parsers2['default'].toArray(regexElementCouple.element);
-                    break;
-                default:
-                    result = regexElementCouple.element;
-                    break;
+            var result = regexElementCouple.element;
+            if (_Regexs2['default'][regexElementCouple.regexName]) {
+                result = _Regexs2['default'][regexElementCouple.regexName].parser(regexElementCouple.element);
             }
 
             return result;

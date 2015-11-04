@@ -4,7 +4,8 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 var names = {
-    ARRAY: 'array'
+    ARRAY: 'array',
+    DOT_SEPARATED: 'dot-separated'
 };
 
 exports['default'] = names;

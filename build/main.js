@@ -4,7 +4,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _srcSpreadsheetController = require('./src/SpreadsheetController');
+
+var _srcSpreadsheetController2 = _interopRequireDefault(_srcSpreadsheetController);
 
 var _srcTokenizer = require('./src/Tokenizer');
 
@@ -12,8 +14,10 @@ var _srcTokenizer2 = _interopRequireDefault(_srcTokenizer);
 
 var _srcRelationParser = require('./src/RelationParser');
 
+var _srcTabUtils = require('./src/TabUtils');
+
 require("babel-core/polyfill");
-var SpreadsheetController = require('./src/SpreadsheetController');
+
 var FileWriter = require('./src/FileWriter');
 var config = require('../config.json');
 var fs = require('fs');
@@ -24,54 +28,12 @@ var tokenizer = new _srcTokenizer2['default']();
 var invalidMediaProps = ['id', 'title'];
 var relationKey = '__relation__';
 var dictKey = '__dict';
-
-var fecthSpreadsheet = function fecthSpreadsheet(spId) {
-    var cleanSpaces = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-    console.log(('Fetching data from ' + spId).bgBlue.white);
-    return new Promise(function (resolve, reject) {
-        var spreadsheet = new SpreadsheetController(spId, function () {
-            spreadsheet.getAll(cleanSpaces).then(function (data) {
-                return resolve(data);
-            }, function (error) {
-                return reject(error);
-            });
-        });
-    });
-};
-
-var parseRow = function parseRow(row) {
-
-    var parsed = {};
-    Object.keys(row).forEach(function (key) {
-        parsed[key] = tokenizer.parse(row[key]);
-    });
-
-    return parsed;
-};
-
-var convertRowToDict = function convertRowToDict(parent, row) {
-    if (typeof row.id !== 'undefined') {
-        var clone = Object.assign({}, row);
-        delete clone.id;
-
-        parent[row.id] = clone;
-    }
-};
-
-var parseTab = function parseTab(spreadsheet, tab) {
-    var rows = spreadsheet[tab].map(function (row) {
-        return parseRow(row);
-    });
-    var isDict = tab.indexOf(dictKey) !== -1;
-
-    return _defineProperty({}, tab, { rows: rows, isDict: isDict });
-};
+var objParseKey = '__obj_parse';
 
 var Main = function Main() {
     var _this = this;
 
-    var metadata = [fecthSpreadsheet(config.spreadsheetTest)];
+    var metadata = [(0, _srcSpreadsheetController.fecthSpreadsheet)(config.spreadsheetTranslations)];
 
     Promise.all(metadata).then(function (results) {
         //Build Id links
@@ -89,10 +51,10 @@ var Main = function Main() {
                 tabKeys.splice(idx, 1);
             }
 
-            //Parse tabs
-            var parsedTabs = tabKeys.map(parseTab.bind(_this, spreadsheet));
+            //Parse tabs regular tabs
+            var parsedTabs = tabKeys.map(_srcTabUtils.parseTab.bind(_this, spreadsheet));
 
-            //Unified tabs
+            //Merge tabs
             parsedTabs = Object.assign.apply(Object, _toConsumableArray(parsedTabs));
 
             //Once we have all well parsed, let's check relations
@@ -105,7 +67,7 @@ var Main = function Main() {
 
                 if (parsedTabs[tabName].isDict) {
                     var dict = {};
-                    rows.forEach(convertRowToDict.bind(_this, dict));
+                    rows.forEach(_srcTabUtils.convertRowToDict.bind(_this, dict));
                     parsedTabs[tabName] = dict;
                 } else {
                     parsedTabs[tabName] = rows;

@@ -23,7 +23,7 @@ class Tokenizer {
     }
 
     discoverRegex(element, regexs, regexName) {
-        if(element.match(regexs[regexName]))
+        if(element.match(regexs[regexName].regex))
         {
             return {regexName, element};
         }
@@ -33,15 +33,10 @@ class Tokenizer {
 
     parseElementByRegex(regexElementCouple)
     {
-        let result;
-        switch (regexElementCouple.regexName)
+        let result = regexElementCouple.element;
+        if(Regexs[regexElementCouple.regexName])
         {
-            case RegexNames.ARRAY:
-                result = Parsers.toArray(regexElementCouple.element);
-                break;
-            default:
-                result = regexElementCouple.element;
-                break;
+            result = Regexs[regexElementCouple.regexName].parser(regexElementCouple.element);
         }
 
         return result;

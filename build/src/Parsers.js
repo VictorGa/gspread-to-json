@@ -27,6 +27,7 @@ var Parsers = (function () {
             t = parsed;
             parts = namespace.split('.');
 
+            console.log('>>deepen', parts);
             while (parts.length) {
                 part = parts.shift();
                 if (!parts.length) {
