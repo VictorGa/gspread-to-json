@@ -50,7 +50,6 @@ export function parseTab(spreadsheet, tab)
 	{
 		rows = spreadsheet[tab].map(row => parseRow(row));
 	}
-	console.log(rows);
 
 	return {[tab]: {rows, isDict, isObjParse}};
 }

@@ -1,5 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports.filterTabNames = filterTabNames;
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
@@ -20,6 +25,10 @@ var Promise = require('native-or-bluebird');
 
 var invalidMediaProps = ['id', 'title'];
 var relationKey = '__relation__';
+
+function filterTabNames(tabName) {
+    return tabName !== relationKey;
+}
 
 var Main = function Main() {
     var _this = this;
@@ -53,19 +62,20 @@ var Main = function Main() {
                 (0, _srcRelationParser.applyRelations)(relations, parsedTabs);
             }
 
-            Object.keys(parsedTabs).forEach(function (tabName) {
+            Object.keys(parsedTabs).filter(filterTabNames).forEach(function (tabName) {
                 var rows = parsedTabs[tabName].rows;
 
                 if (parsedTabs[tabName].isDict) {
                     var dict = {};
                     rows.forEach(_srcTabUtils.convertRowToDict.bind(_this, dict));
                     parsedTabs[tabName] = dict;
+                    console.log(dict);
                 } else {
                     parsedTabs[tabName] = rows;
                 }
             });
 
-            console.log(parsedTabs);
+            //console.log(parsedTabs);
         });
     });
 };

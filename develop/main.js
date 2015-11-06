@@ -11,9 +11,14 @@ import {parseTab, parseRow, convertRowToDict} from './src/TabUtils';
 let invalidMediaProps = ['id', 'title'];
 const relationKey = '__relation__';
 
+export function filterTabNames(tabName)
+{
+    return tabName !== relationKey;
+}
+
 var Main = function () {
 
-    let metadata = [fecthSpreadsheet(config.spreadsheetTranslations)];
+    let metadata = [fecthSpreadsheet(config.spreadsheetTranslations) ];
 
     Promise.all(metadata).then(results => {
         //Build Id links
@@ -42,7 +47,7 @@ var Main = function () {
                 applyRelations(relations, parsedTabs);
             }
 
-            Object.keys(parsedTabs).forEach(tabName => {
+            Object.keys(parsedTabs).filter(filterTabNames).forEach(tabName => {
                 let {rows} = parsedTabs[tabName];
 
                 if (parsedTabs[tabName].isDict) {
@@ -56,7 +61,7 @@ var Main = function () {
                 }
             });
 
-            console.log(parsedTabs);
+            //console.log(parsedTabs);
         })
 
     })

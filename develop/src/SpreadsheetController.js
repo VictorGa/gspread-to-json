@@ -15,7 +15,7 @@ class SpreadsheetController
 
     init(onReady) {
         var self = this;
-        this.sheet.getInfo(function (err, sheet_info) {
+        this.sheet.getInfo((err, sheet_info) => {
             self.data = sheet_info;
             onReady();
         });

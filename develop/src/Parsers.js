@@ -10,7 +10,6 @@ class Parsers
         str = str.substring(1,str.length-1).split(',');
 
         return str;
-
     }
 
     static deepen(namespace, value, parsed) {

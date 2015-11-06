@@ -4,13 +4,19 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 exports.write = write;
-var bodyParser = require('body-parser');
 var sanitize = require("sanitize-filename");
 var fs = require('fs');
 var config = require('../../config.json');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var colors = require('colors');
+
+/**
+ * Write a json file to destination
+ * @param fileName
+ * @param data
+ * @param base
+ */
 
 function write(fileName, data, base) {
 	if (base === void 0) {
@@ -19,6 +25,7 @@ function write(fileName, data, base) {
 
 	var output = JSON.stringify(data, null, 2);
 	var dirname = path.dirname(base + fileName + '.json');
+
 	mkdirp(dirname, function (err) {
 		if (err) {
 			console.log(err);
