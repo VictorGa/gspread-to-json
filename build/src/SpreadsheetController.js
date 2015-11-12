@@ -84,6 +84,7 @@ var SpreadsheetController = (function () {
         value: function filter(rows, clean) {
             var filtered = [];
             var filteredRow = {};
+            var locales = {};
 
             for (var i = 0; i < rows.length; i++) {
                 filteredRow = {};
@@ -91,11 +92,21 @@ var SpreadsheetController = (function () {
                 for (var key in rows[i]) {
                     if (rows[i].hasOwnProperty(key) && this._incompatibleTags.indexOf(key) === -1) {
                         var filteredKey = '';
-                        if (key.indexOf('locale') === -1) {
+                        var locale = undefined;
+
+                        //Check if property is localized
+                        if (key.indexOf('-locale-') === -1) {
                             filteredKey = _Parsers2['default'].camelize(_Parsers2['default'].cleanSpaces(key));
                         } else {
-                            filteredKey = _Parsers2['default'].cleanSpaces(key);
+                            locale = this.extractLocale(key);
+                            if (!locales.hasOwnProperty(locale)) {
+                                locales[locale] = [];
+                            }
+                            filteredKey = _Parsers2['default'].camelize(_Parsers2['default'].cleanLocale(_Parsers2['default'].cleanSpaces(key)));
+
+                            locales[locale].push(filteredKey);
                         }
+
                         filteredRow[filteredKey] = clean ? _Parsers2['default'].cleanSpaces(rows[i][key]) : rows[i][key];
                     }
                 }
@@ -103,7 +114,13 @@ var SpreadsheetController = (function () {
                 filtered.push(filteredRow);
             }
 
-            return filtered;
+            return { rows: filtered, locales: locales };
+        }
+    }, {
+        key: 'extractLocale',
+        value: function extractLocale(propertyName) {
+            //Check if locale is present property name
+            return propertyName.split('-').pop();
         }
     }, {
         key: 'getCellsByWorksheetId',

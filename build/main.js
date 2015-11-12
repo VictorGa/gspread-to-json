@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 exports.filterTabNames = filterTabNames;
 
@@ -27,57 +27,55 @@ var invalidMediaProps = ['id', 'title'];
 var relationKey = '__relation__';
 
 function filterTabNames(tabName) {
-    return tabName !== relationKey;
+	return tabName !== relationKey;
 }
 
 var Main = function Main() {
-    var _this = this;
+	var _this = this;
 
-    var metadata = [(0, _srcSpreadsheetController.fecthSpreadsheet)(config.spreadsheetTranslations)];
+	var metadata = [(0, _srcSpreadsheetController.fecthSpreadsheet)(config.spreadsheetTranslations)];
 
-    Promise.all(metadata).then(function (results) {
-        //Build Id links
-        results.forEach(function (spreadsheet) {
+	Promise.all(metadata).then(function (results) {
+		//Build Id links
+		results.forEach(function (spreadsheet) {
+			//Get relations if exists
+			var relations = undefined;
+			var tabKeys = Object.keys(spreadsheet);
 
-            //Get relations if exists
-            var relations = undefined;
-            var tabKeys = Object.keys(spreadsheet);
+			if (tabKeys.includes(relationKey)) {
+				relations = (0, _srcRelationParser.parseRelations)(spreadsheet[relationKey].rows);
 
-            if (tabKeys.includes(relationKey)) {
-                relations = (0, _srcRelationParser.parseRelations)(spreadsheet[relationKey]);
+				//Remove it from keys
+				var idx = tabKeys.indexOf(relationKey);
+				tabKeys.splice(idx, 1);
+			}
 
-                //Remove it from keys
-                var idx = tabKeys.indexOf(relationKey);
-                tabKeys.splice(idx, 1);
-            }
+			//Parse tabs regular tabs
+			var parsedTabs = tabKeys.map(_srcTabUtils.parseTab.bind(_this, spreadsheet));
 
-            //Parse tabs regular tabs
-            var parsedTabs = tabKeys.map(_srcTabUtils.parseTab.bind(_this, spreadsheet));
+			//Merge tabs
+			parsedTabs = Object.assign.apply(Object, _toConsumableArray(parsedTabs));
 
-            //Merge tabs
-            parsedTabs = Object.assign.apply(Object, _toConsumableArray(parsedTabs));
+			//Once we have all well parsed, let's check relations
+			if (typeof relations !== 'undefined') {
+				(0, _srcRelationParser.applyRelations)(relations, parsedTabs);
+			}
 
-            //Once we have all well parsed, let's check relations
-            if (typeof relations !== 'undefined') {
-                (0, _srcRelationParser.applyRelations)(relations, parsedTabs);
-            }
+			Object.keys(parsedTabs).filter(filterTabNames).forEach(function (tabName) {
+				var rows = parsedTabs[tabName].rows;
 
-            Object.keys(parsedTabs).filter(filterTabNames).forEach(function (tabName) {
-                var rows = parsedTabs[tabName].rows;
+				if (parsedTabs[tabName].isDict) {
+					var dict = {};
+					rows.forEach(_srcTabUtils.convertRowToDict.bind(_this, dict));
+					parsedTabs[tabName] = dict;
+				} else {
+					parsedTabs[tabName] = rows;
+				}
+			});
 
-                if (parsedTabs[tabName].isDict) {
-                    var dict = {};
-                    rows.forEach(_srcTabUtils.convertRowToDict.bind(_this, dict));
-                    parsedTabs[tabName] = dict;
-                    console.log(dict);
-                } else {
-                    parsedTabs[tabName] = rows;
-                }
-            });
-
-            //console.log(parsedTabs);
-        });
-    });
+			console.log(parsedTabs);
+		});
+	});
 };
 
 new Main();

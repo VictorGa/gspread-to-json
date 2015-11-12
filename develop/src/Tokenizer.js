@@ -24,14 +24,20 @@ class Tokenizer {
 
 		return result;
 	}
+
 }
 
+/**
+ * Check which rule to apply for the current element
+ * @param element
+ * @returns {*}
+ */
 export function parse(element)
 {
 	let parsed = Object.keys(Regexs).
-					map(Tokenizer.discoverRegex.bind(this, element, Regexs)).
-					filter(regexElement => typeof regexElement !== 'undefined').
-					map(Tokenizer.parseElementByRegex.bind(this));
+	map(Tokenizer.discoverRegex.bind(this, element, Regexs)).
+	filter(regexElement => typeof regexElement !== 'undefined').
+	map(Tokenizer.parseElementByRegex.bind(this));
 
 	if(parsed.length === 0)
 	{

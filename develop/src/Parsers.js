@@ -42,6 +42,11 @@ class Parsers
     {
         return str.replace(/\s+/g, '');
     }
+
+    static cleanLocale(str)
+    {
+        return str.replace('-locale-', '-');
+    }
 }
 
 export default Parsers;

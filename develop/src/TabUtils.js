@@ -5,9 +5,13 @@ import {parse} from './Tokenizer';
 const dictKey = '__dict';
 const objParseKey = '__obj_parse';
 
+/**
+ * For each row parse content applying rules
+ * @param row
+ * @returns {{}}
+ */
 export function parseRow(row)
 {
-
 	let parsed = {};
 	Object.keys(row).forEach(key =>
 	{
@@ -44,11 +48,11 @@ export function parseTab(spreadsheet, tab)
 	if(isObjParse)
 	{
 		rows = {};
-		spreadsheet[tab].forEach(row => Parsers.deepen(row.id, row.value, rows));
+		spreadsheet[tab].rows.forEach(row => Parsers.deepen(row.id, row.value, rows));
 	}
 	else
 	{
-		rows = spreadsheet[tab].map(row => parseRow(row));
+		rows = spreadsheet[tab].rows.map(row => parseRow(row));
 	}
 
 	return {[tab]: {rows, isDict, isObjParse}};

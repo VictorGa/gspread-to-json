@@ -29,6 +29,12 @@ var Tokenizer = (function () {
 		_classCallCheck(this, Tokenizer);
 	}
 
+	/**
+  * Check which rule to apply for the current element
+  * @param element
+  * @returns {*}
+  */
+
 	_createClass(Tokenizer, null, [{
 		key: 'discoverRegex',
 		value: function discoverRegex(element, regexs, regexName) {

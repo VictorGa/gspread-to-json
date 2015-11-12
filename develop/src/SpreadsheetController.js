@@ -54,25 +54,40 @@ class SpreadsheetController
         })
     }
 
-    filter(rows, clean) {
-        var filtered = [];
-        var filteredRow = {};
+    filter(rows, clean)
+    {
+        let filtered = [];
+        let filteredRow = {};
+        let locales = {};
 
-        for (var i = 0; i < rows.length; i++) {
+        for (var i = 0; i < rows.length; i++)
+        {
             filteredRow = {};
 
-            for (var key in rows[i]) {
+            for (var key in rows[i])
+            {
                 if (rows[i].hasOwnProperty(key) && this._incompatibleTags.indexOf(key) === -1)
                 {
                     let filteredKey = '';
-                    if(key.indexOf('locale') === -1)
+                    let locale;
+
+                    //Check if property is localized
+                    if(key.indexOf('-locale-') === -1)
                     {
                         filteredKey = Parsers.camelize(Parsers.cleanSpaces(key));
                     }
                     else
                     {
-                        filteredKey = Parsers.cleanSpaces(key);
+                        locale = this.extractLocale(key);
+                        if(!locales.hasOwnProperty(locale))
+                        {
+                            locales[locale] = [];
+                        }
+                        filteredKey = Parsers.camelize(Parsers.cleanLocale(Parsers.cleanSpaces(key)));
+
+                        locales[locale].push(filteredKey);
                     }
+
                     filteredRow[filteredKey] = clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
                 }
             }
@@ -80,7 +95,13 @@ class SpreadsheetController
             filtered.push(filteredRow);
         }
 
-        return filtered;
+        return {rows: filtered, locales};
+    }
+
+    extractLocale(propertyName)
+    {
+        //Check if locale is present property name
+        return propertyName.split('-').pop();
     }
 
     getCellsByWorksheetId(worksheetId, onReady) {
@@ -93,7 +114,6 @@ class SpreadsheetController
             }
         }
     }
-
 }
 
 export function fecthSpreadsheet(spId, cleanSpaces = true) {

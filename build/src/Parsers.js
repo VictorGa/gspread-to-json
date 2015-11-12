@@ -49,6 +49,11 @@ var Parsers = (function () {
         value: function cleanSpaces(str) {
             return str.replace(/\s+/g, '');
         }
+    }, {
+        key: 'cleanLocale',
+        value: function cleanLocale(str) {
+            return str.replace('-locale-', '-');
+        }
     }]);
 
     return Parsers;
