@@ -14,9 +14,8 @@ class SpreadsheetController
     }
 
     init(onReady) {
-        var self = this;
         this.sheet.getInfo((err, sheet_info) => {
-            self.data = sheet_info;
+            this.data = sheet_info;
             onReady();
         });
     }
@@ -33,7 +32,7 @@ class SpreadsheetController
                 results => {
                     //results is an array of objects, each object being a worksheet
                     //now we merge all in one object
-                    resolve(Object.assign(...results));
+                    resolve({title: this.data.title, results: Object.assign(...results)});
                 },
                 error => {
                     reject(error);
@@ -68,27 +67,29 @@ class SpreadsheetController
             {
                 if (rows[i].hasOwnProperty(key) && this._incompatibleTags.indexOf(key) === -1)
                 {
-                    let filteredKey = '';
+                    let filteredKey;
                     let locale;
+                    let value =  clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
 
                     //Check if property is localized
                     if(key.indexOf('-locale-') === -1)
                     {
                         filteredKey = Parsers.camelize(Parsers.cleanSpaces(key));
+                        filteredRow[filteredKey] = value;
                     }
                     else
                     {
+                        filteredKey = Parsers.camelize(Parsers.cleanLocale(Parsers.cleanSpaces(key)));
                         locale = this.extractLocale(key);
                         if(!locales.hasOwnProperty(locale))
                         {
-                            locales[locale] = [];
+                            locales[locale] = {[filteredKey]: []};
                         }
-                        filteredKey = Parsers.camelize(Parsers.cleanLocale(Parsers.cleanSpaces(key)));
 
-                        locales[locale].push(filteredKey);
+                        locales[locale][filteredKey].push(value);
                     }
 
-                    filteredRow[filteredKey] = clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
+                    //filteredRow[filteredKey] = clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
                 }
             }
 

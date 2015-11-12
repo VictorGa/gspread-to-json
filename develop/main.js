@@ -7,6 +7,7 @@ var Promise = require('native-or-bluebird');
 import {default as SpreadsheetController, fecthSpreadsheet}  from './src/SpreadsheetController';
 import {parseRelations,applyRelations} from './src/RelationParser';
 import {parseTab, parseRow, convertRowToDict} from './src/TabUtils';
+import Parsers from './src/Parsers';
 
 let invalidMediaProps = ['id', 'title'];
 const relationKey = '__relation__';
@@ -24,10 +25,11 @@ var Main = function()
 	Promise.all(metadata).then(results =>
 	{
 		//Build Id links
-		results.forEach(spreadsheet =>
+		results.forEach(data =>
 		{
 			//Get relations if exists
 			let relations;
+			let spreadsheet = data.results;
 			let tabKeys = Object.keys(spreadsheet);
 
 			if(tabKeys.includes(relationKey))
@@ -42,6 +44,7 @@ var Main = function()
 			//Parse tabs regular tabs
 			let parsedTabs = tabKeys.map(parseTab.bind(this, spreadsheet));
 
+			console.log(parsedTabs);
 			//Merge tabs
 			parsedTabs = Object.assign(...parsedTabs);
 
@@ -51,25 +54,58 @@ var Main = function()
 				applyRelations(relations, parsedTabs);
 			}
 
+			let files = {};
 			Object.keys(parsedTabs)
 				.filter(filterTabNames)
 				.forEach(tabName =>
 				{
-					let {rows} = parsedTabs[tabName];
+					let {rows, localizedRows} = parsedTabs[tabName];
+					let locales = Object.keys(localizedRows);
 
-					if(parsedTabs[tabName].isDict)
+					if(locales.length)
 					{
-						let dict = {};
-						rows.forEach(convertRowToDict.bind(this, dict));
-						parsedTabs[tabName] = dict;
+						locales.forEach(locale =>{
+							//Create locale
+							if(typeof files[locale] === 'undefined')
+							{
+								files[locale] = {};
+							}
+
+							rows = rows.map((row, index) =>{
+								let localized = localizedRows[locale][index];
+								return Object.assign(row, localized);
+							});
+
+							parsedTabs[tabName].rows = rows;
+							console.log(rows);
+							files[locale][tabName] = parsedTabs[tabName].rows;
+						});
 					}
 					else
 					{
-						parsedTabs[tabName] = rows;
+						if(typeof files[data.title] === 'undefined')
+						{
+							files[data.title] = {};
+						}
+
+						let tab = tabName;
+						if(parsedTabs[tabName].isDict)
+						{
+							let dict = {};
+							rows = rows.forEach(convertRowToDict.bind(this, dict));
+							tab = Parsers.cleanDict(tabName);
+						}
+						else if(parsedTabs[tabName].isObjParse)
+						{
+							tab = Parsers.cleanObjParse(tabName);
+						}
+
+						files[data.title][tab] = rows;
 					}
+
 				});
 
-			console.log(parsedTabs);
+			console.log(files);
 		})
 
 	})

@@ -17,6 +17,10 @@ var _srcRelationParser = require('./src/RelationParser');
 
 var _srcTabUtils = require('./src/TabUtils');
 
+var _srcParsers = require('./src/Parsers');
+
+var _srcParsers2 = _interopRequireDefault(_srcParsers);
+
 require("babel-core/polyfill");
 var config = require('../config.json');
 var fs = require('fs');
@@ -37,9 +41,10 @@ var Main = function Main() {
 
 	Promise.all(metadata).then(function (results) {
 		//Build Id links
-		results.forEach(function (spreadsheet) {
+		results.forEach(function (data) {
 			//Get relations if exists
 			var relations = undefined;
+			var spreadsheet = data.results;
 			var tabKeys = Object.keys(spreadsheet);
 
 			if (tabKeys.includes(relationKey)) {
@@ -53,6 +58,7 @@ var Main = function Main() {
 			//Parse tabs regular tabs
 			var parsedTabs = tabKeys.map(_srcTabUtils.parseTab.bind(_this, spreadsheet));
 
+			console.log(parsedTabs);
 			//Merge tabs
 			parsedTabs = Object.assign.apply(Object, _toConsumableArray(parsedTabs));
 
@@ -61,19 +67,49 @@ var Main = function Main() {
 				(0, _srcRelationParser.applyRelations)(relations, parsedTabs);
 			}
 
+			var files = {};
 			Object.keys(parsedTabs).filter(filterTabNames).forEach(function (tabName) {
-				var rows = parsedTabs[tabName].rows;
+				var _parsedTabs$tabName = parsedTabs[tabName];
+				var rows = _parsedTabs$tabName.rows;
+				var localizedRows = _parsedTabs$tabName.localizedRows;
 
-				if (parsedTabs[tabName].isDict) {
-					var dict = {};
-					rows.forEach(_srcTabUtils.convertRowToDict.bind(_this, dict));
-					parsedTabs[tabName] = dict;
+				var locales = Object.keys(localizedRows);
+
+				if (locales.length) {
+					locales.forEach(function (locale) {
+						//Create locale
+						if (typeof files[locale] === 'undefined') {
+							files[locale] = {};
+						}
+
+						rows = rows.map(function (row, index) {
+							var localized = localizedRows[locale][index];
+							return Object.assign(row, localized);
+						});
+
+						parsedTabs[tabName].rows = rows;
+						console.log(rows);
+						files[locale][tabName] = parsedTabs[tabName].rows;
+					});
 				} else {
-					parsedTabs[tabName] = rows;
+					if (typeof files[data.title] === 'undefined') {
+						files[data.title] = {};
+					}
+
+					var tab = tabName;
+					if (parsedTabs[tabName].isDict) {
+						var dict = {};
+						rows = rows.forEach(_srcTabUtils.convertRowToDict.bind(_this, dict));
+						tab = _srcParsers2['default'].cleanDict(tabName);
+					} else if (parsedTabs[tabName].isObjParse) {
+						tab = _srcParsers2['default'].cleanObjParse(tabName);
+					}
+
+					files[data.title][tab] = rows;
 				}
 			});
 
-			console.log(parsedTabs);
+			console.log(files);
 		});
 	});
 };

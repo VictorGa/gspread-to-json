@@ -4,6 +4,13 @@ import Parsers from './Parsers';
 
 class Tokenizer {
 
+	/**
+	 * Check if regex match
+	 * @param element
+	 * @param regexs
+	 * @param regexName
+	 * @returns {*}
+	 */
 	static discoverRegex(element, regexs, regexName)
 	{
 		if(element.match(regexs[regexName].regex))
@@ -14,6 +21,11 @@ class Tokenizer {
 		return {element};
 	}
 
+	/**
+	 * Apply correct regex
+	 * @param regexElementCouple
+	 * @returns {*}
+	 */
 	static parseElementByRegex(regexElementCouple)
 	{
 		let result = regexElementCouple.element;

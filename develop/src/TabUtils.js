@@ -21,6 +21,12 @@ export function parseRow(row)
 	return parsed;
 }
 
+/**
+ * Set the whole row as dictionary
+ * [id] : data
+ * @param parent
+ * @param row
+ */
 export function convertRowToDict(parent, row)
 {
 	if(typeof row.id !== 'undefined')
@@ -32,16 +38,19 @@ export function convertRowToDict(parent, row)
 	}
 }
 
-export function convertRowToObject(parent, row, value)
-{
-	console.log('>> obj', row)
-}
-
+/**
+ * Parse spreadsheet tab.
+ * Loop each tab's row and apply regexs
+ * @param spreadsheet
+ * @param tab
+ * @returns {{}}
+ */
 export function parseTab(spreadsheet, tab)
 {
 	let isDict = tab.indexOf(dictKey) !== -1;
 	let isObjParse = tab.indexOf(objParseKey) !== -1;
 	let rows;
+	let localizedRows = {};
 
 	//In case is a object should be deepened
 	//Just couples of id-copy
@@ -52,8 +61,26 @@ export function parseTab(spreadsheet, tab)
 	}
 	else
 	{
+		Object.keys(spreadsheet[tab].locales).forEach(locale =>{
+			if(typeof localizedRows[locale] === 'undefined')
+			{
+				localizedRows[locale] = [];
+			}
+
+			let values = spreadsheet[tab].locales[locale];
+			Object.keys(values).forEach(propertyName =>
+			{
+				values[propertyName].forEach(value =>{
+					localizedRows[locale].push(parseRow({[propertyName]: value}));
+				})
+			});
+		});
+
 		rows = spreadsheet[tab].rows.map(row => parseRow(row));
+
+		//Locales
+		console.log('>>> locales', localizedRows)
 	}
 
-	return {[tab]: {rows, isDict, isObjParse}};
+	return {[tab]: {rows, isDict, isObjParse, localizedRows, isLocalized: typeof spreadsheet[tab].locales !== 'undefined'}};
 }
