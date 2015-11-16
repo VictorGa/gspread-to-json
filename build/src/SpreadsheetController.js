@@ -7,6 +7,7 @@ Object.defineProperty(exports, '__esModule', {
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 exports.fecthSpreadsheet = fecthSpreadsheet;
+exports.loadSpreadsheets = loadSpreadsheets;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -33,6 +34,13 @@ var SpreadsheetController = (function () {
         this.sheet = new GoogleSpreadsheet(id);
         this.sheet.useServiceAccountAuth(config.googleauth, this.init.bind(this, onReady));
     }
+
+    /**
+     * Fetch spreadsheet
+     * @param spId
+     * @param cleanSpaces
+     * @returns {exports|module.exports}
+     */
 
     _createClass(SpreadsheetController, [{
         key: 'init',
@@ -155,6 +163,24 @@ function fecthSpreadsheet(spId) {
             });
         });
     });
+}
+
+;
+
+/**
+ * Create a list of promises for spreadsheets
+ * @param list
+ * @returns {Array}
+ */
+
+function loadSpreadsheets(list) {
+
+    var metadata = [];
+    list.forEach(function (spreadsheet) {
+        metadata.push(fecthSpreadsheet(spreadsheet.id, JSON.parse(spreadsheet.cleanSpaces)));
+    });
+
+    return metadata;
 }
 
 ;

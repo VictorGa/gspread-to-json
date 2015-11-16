@@ -4,12 +4,12 @@ var fs = require('fs');
 var colors = require('colors');
 var Promise = require('native-or-bluebird');
 
-import {default as SpreadsheetController, fecthSpreadsheet}  from './src/SpreadsheetController';
+import {default as SpreadsheetController, fecthSpreadsheet, loadSpreadsheets}  from './src/SpreadsheetController';
 import {parseRelations,applyRelations} from './src/RelationParser';
 import {parseTab, parseRow, convertRowToDict} from './src/TabUtils';
+import {write, writeAll} from './src/FileWriter';
 import Parsers from './src/Parsers';
 
-let invalidMediaProps = ['id', 'title'];
 const relationKey = '__relation__';
 
 export function filterTabNames(tabName)
@@ -17,12 +17,8 @@ export function filterTabNames(tabName)
 	return tabName !== relationKey;
 }
 
-var Main = function()
-{
-
-	let metadata = [fecthSpreadsheet(config.spreadsheetTranslations)];
-
-	Promise.all(metadata).then(results =>
+Promise.all(loadSpreadsheets(config.spreadsheets))
+	.then(results =>
 	{
 		//Build Id links
 		results.forEach(data =>
@@ -32,6 +28,7 @@ var Main = function()
 			let spreadsheet = data.results;
 			let tabKeys = Object.keys(spreadsheet);
 
+			//Check if there is a relation tab
 			if(tabKeys.includes(relationKey))
 			{
 				relations = parseRelations(spreadsheet[relationKey].rows);
@@ -44,7 +41,6 @@ var Main = function()
 			//Parse tabs regular tabs
 			let parsedTabs = tabKeys.map(parseTab.bind(this, spreadsheet));
 
-			console.log(parsedTabs);
 			//Merge tabs
 			parsedTabs = Object.assign(...parsedTabs);
 
@@ -54,6 +50,7 @@ var Main = function()
 				applyRelations(relations, parsedTabs);
 			}
 
+			//Sort by files and locales
 			let files = {};
 			Object.keys(parsedTabs)
 				.filter(filterTabNames)
@@ -64,14 +61,16 @@ var Main = function()
 
 					if(locales.length)
 					{
-						locales.forEach(locale =>{
+						locales.forEach(locale =>
+						{
 							//Create locale
 							if(typeof files[locale] === 'undefined')
 							{
 								files[locale] = {};
 							}
 
-							rows = rows.map((row, index) =>{
+							rows = rows.map((row, index) =>
+							{
 								let localized = localizedRows[locale][index];
 								return Object.assign(row, localized);
 							});
@@ -94,6 +93,8 @@ var Main = function()
 							let dict = {};
 							rows = rows.forEach(convertRowToDict.bind(this, dict));
 							tab = Parsers.cleanDict(tabName);
+
+							console.log('>>> dict', tab, rows);
 						}
 						else if(parsedTabs[tabName].isObjParse)
 						{
@@ -105,11 +106,8 @@ var Main = function()
 
 				});
 
-			console.log(files);
+			//Save all files
+			writeAll(files);
 		})
 
 	})
-
-};
-
-new Main();

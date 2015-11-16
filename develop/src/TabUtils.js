@@ -29,6 +29,7 @@ export function parseRow(row)
  */
 export function convertRowToDict(parent, row)
 {
+	console.log(row);
 	if(typeof row.id !== 'undefined')
 	{
 		let clone = Object.assign({}, row);

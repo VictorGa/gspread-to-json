@@ -28,5 +28,13 @@ export function write(fileName, data, base)
 			fs.writeFileSync(base + fileName + '.json', output, {encoding :config.encoding});
 		}
 	})
-}
+};
+
+export function writeAll(files)
+{
+	Object.keys(files).forEach(fileName =>
+	{
+		write(fileName, files[fileName]);
+	});
+};
 

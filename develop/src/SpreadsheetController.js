@@ -117,6 +117,12 @@ class SpreadsheetController
     }
 }
 
+/**
+ * Fetch spreadsheet
+ * @param spId
+ * @param cleanSpaces
+ * @returns {exports|module.exports}
+ */
 export function fecthSpreadsheet(spId, cleanSpaces = true) {
 
     console.log(`Fetching data from ${spId}`.bgBlue.white);
@@ -125,6 +131,21 @@ export function fecthSpreadsheet(spId, cleanSpaces = true) {
             spreadsheet.getAll(cleanSpaces).then(data => resolve(data), error => reject(error));
         });
     });
+};
+
+/**
+ * Create a list of promises for spreadsheets
+ * @param list
+ * @returns {Array}
+ */
+export function loadSpreadsheets(list) {
+
+    let metadata = [];
+    list.forEach(spreadsheet => {
+      metadata.push(fecthSpreadsheet(spreadsheet.id, JSON.parse(spreadsheet.cleanSpaces)));
+    });
+
+    return metadata;
 };
 
 export default SpreadsheetController;
