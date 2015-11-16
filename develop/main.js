@@ -91,10 +91,10 @@ Promise.all(loadSpreadsheets(config.spreadsheets))
 						if(parsedTabs[tabName].isDict)
 						{
 							let dict = {};
-							rows = rows.forEach(convertRowToDict.bind(this, dict));
+							rows.forEach(convertRowToDict.bind(this, dict));
 							tab = Parsers.cleanDict(tabName);
+							rows = dict;
 
-							console.log('>>> dict', tab, rows);
 						}
 						else if(parsedTabs[tabName].isObjParse)
 						{
@@ -103,7 +103,6 @@ Promise.all(loadSpreadsheets(config.spreadsheets))
 
 						files[data.title][tab] = rows;
 					}
-
 				});
 
 			//Save all files

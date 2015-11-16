@@ -38,11 +38,13 @@ function filterTabNames(tabName) {
 Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)).then(function (results) {
 	//Build Id links
 	results.forEach(function (data) {
+		console.log(data);
 		//Get relations if exists
 		var relations = undefined;
 		var spreadsheet = data.results;
 		var tabKeys = Object.keys(spreadsheet);
 
+		//Check if there is a relation tab
 		if (tabKeys.includes(relationKey)) {
 			relations = (0, _srcRelationParser.parseRelations)(spreadsheet[relationKey].rows);
 
@@ -54,7 +56,6 @@ Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)
 		//Parse tabs regular tabs
 		var parsedTabs = tabKeys.map(_srcTabUtils.parseTab.bind(undefined, spreadsheet));
 
-		console.log(parsedTabs);
 		//Merge tabs
 		parsedTabs = Object.assign.apply(Object, _toConsumableArray(parsedTabs));
 
@@ -63,6 +64,7 @@ Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)
 			(0, _srcRelationParser.applyRelations)(relations, parsedTabs);
 		}
 
+		//Sort by files and locales
 		var files = {};
 		Object.keys(parsedTabs).filter(filterTabNames).forEach(function (tabName) {
 			var _parsedTabs$tabName = parsedTabs[tabName];
@@ -95,22 +97,20 @@ Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)
 				var tab = tabName;
 				if (parsedTabs[tabName].isDict) {
 					var dict = {};
-					rows = rows.forEach(_srcTabUtils.convertRowToDict.bind(undefined, dict));
+					rows.forEach(_srcTabUtils.convertRowToDict.bind(undefined, dict));
 					tab = _srcParsers2['default'].cleanDict(tabName);
-
-					console.log('>>> dict', tab, rows);
+					rows = dict;
 				} else if (parsedTabs[tabName].isObjParse) {
 					tab = _srcParsers2['default'].cleanObjParse(tabName);
 				}
 
+				console.log('>>> dict', data.title, rows);
 				files[data.title][tab] = rows;
 			}
 		});
 
-		console.log(files);
-		Object.keys(files).forEach(function (fileName) {
-			(0, _srcFileWriter.write)(fileName, files[fileName]);
-		});
+		//Save all files
+		(0, _srcFileWriter.writeAll)(files);
 	});
 });
 //# sourceMappingURL=main.js.map

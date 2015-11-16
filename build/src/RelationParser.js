@@ -47,6 +47,9 @@ function applyRelations(relations, tabs) {
         var keyA = _relation$relation[0];
         var keyB = _relation$relation[1];
 
+        if (typeof tabA === 'undefinded' || typeof tabB === 'undefinded') {
+            console.error('Relation ' + relation.tabA + '->' + relation.tabB + ' does not exist');
+        }
         //TabA includes element from TabB
         tabA.rows = tabA.rows.map(function (row) {
             var keys = row[keyA];
