@@ -6,7 +6,7 @@ var Promise = require('native-or-bluebird');
 
 import {default as SpreadsheetController, fecthSpreadsheet}  from './src/SpreadsheetController';
 import {parseRelations,applyRelations} from './src/RelationParser';
-import {parseTab, parseRow, convertRowToDict} from './src/TabUtils';
+import {parseTab, parseRow, convertRowToDict, getLocales} from './src/TabUtils';
 
 let invalidMediaProps = ['id', 'title'];
 const relationKey = '__relation__';
@@ -18,7 +18,8 @@ export function filterTabNames(tabName)
 
 var Main = function () {
 
-    let metadata = [fecthSpreadsheet(config.spreadsheetTranslations) ];
+    //Loop sheets
+    let metadata = config.sheets.map(sheet => fecthSpreadsheet(sheet));
 
     Promise.all(metadata).then(results => {
         //Build Id links
@@ -57,6 +58,7 @@ var Main = function () {
                 }
                 else
                 {
+                    getLocales(rows);
                     parsedTabs[tabName] = rows;
                 }
             });

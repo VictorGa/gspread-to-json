@@ -28,6 +28,14 @@ export function convertRowToDict(parent, row)
 	}
 }
 
+export function getLocales(rows)
+{
+	rows.map(row => {
+		let {id} = row;
+		let locale = id.split('-')
+	})
+}
+
 export function convertRowToObject(parent, row, value)
 {
 	console.log('>> obj', row)

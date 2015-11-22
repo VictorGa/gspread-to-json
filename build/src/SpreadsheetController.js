@@ -122,12 +122,12 @@ var SpreadsheetController = (function () {
     return SpreadsheetController;
 })();
 
-function fecthSpreadsheet(spId) {
+function fecthSpreadsheet(sheet) {
     var cleanSpaces = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
-    console.log(('Fetching data from ' + spId).bgBlue.white);
+    console.log(('Fetching data from ' + sheet.name).bgBlue.white);
     return new Promise(function (resolve, reject) {
-        var spreadsheet = new SpreadsheetController(spId, function () {
+        var spreadsheet = new SpreadsheetController(sheet.id, function () {
             spreadsheet.getAll(cleanSpaces).then(function (data) {
                 return resolve(data);
             }, function (error) {

@@ -33,7 +33,10 @@ function filterTabNames(tabName) {
 var Main = function Main() {
     var _this = this;
 
-    var metadata = [(0, _srcSpreadsheetController.fecthSpreadsheet)(config.spreadsheetTranslations)];
+    //Loop sheets
+    var metadata = config.sheets.map(function (sheet) {
+        return (0, _srcSpreadsheetController.fecthSpreadsheet)(sheet);
+    });
 
     Promise.all(metadata).then(function (results) {
         //Build Id links
@@ -69,7 +72,6 @@ var Main = function Main() {
                     var dict = {};
                     rows.forEach(_srcTabUtils.convertRowToDict.bind(_this, dict));
                     parsedTabs[tabName] = dict;
-                    console.log(dict);
                 } else {
                     parsedTabs[tabName] = rows;
                 }
