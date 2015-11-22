@@ -12,101 +12,112 @@ import Parsers from './src/Parsers';
 
 const relationKey = '__relation__';
 
-export function filterTabNames(tabName)
-{
-	return tabName !== relationKey;
+export function filterTabNames(tabName) {
+    return tabName !== relationKey;
 }
 
-Promise.all(loadSpreadsheets(config.spreadsheets))
-	.then(results =>
-	{
-		//Build Id links
-		results.forEach(data =>
-		{
-			//Get relations if exists
-			let relations;
-			let spreadsheet = data.results;
-			let tabKeys = Object.keys(spreadsheet);
+export function processEnv() {
+    // print process.argv
+    let spreadsheetNames = [];
+    let _config = config.spreadsheets;
+    process.argv.forEach(function (val, index, array) {
+        if (val.indexOf('spreadfile') !== -1) {
+            let name = val.split(':').pop();
+            spreadsheetNames.push(name);
+        }
+    });
 
-			//Check if there is a relation tab
-			if(tabKeys.includes(relationKey))
-			{
-				relations = parseRelations(spreadsheet[relationKey].rows);
+    // Get spreadsheet config (id, name)
+    return spreadsheetNames.map(spreadsheetName => _config.find(({name}) => spreadsheetName === name))
+        .filter(spreadsheetConfig => typeof spreadsheetConfig !== 'undefined');
+}
 
-				//Remove it from keys
-				let idx = tabKeys.indexOf(relationKey);
-				tabKeys.splice(idx, 1);
-			}
 
-			//Parse tabs regular tabs
-			let parsedTabs = tabKeys.map(parseTab.bind(this, spreadsheet));
+// Check input
+let spreadsheets = processEnv();
+if (!spreadsheets.length) {
+    spreadsheets = config.spreadsheets;
+}
 
-			//Merge tabs
-			parsedTabs = Object.assign(...parsedTabs);
+//Fetch spreadsheets
+let spreadsheetsLoaded = Promise.all(loadSpreadsheets(spreadsheets));
 
-			//Once we have all well parsed, let's check relations
-			if(typeof relations !== 'undefined')
-			{
-				applyRelations(relations, parsedTabs);
-			}
+spreadsheetsLoaded.then(results =>
+{
+    //Build Id links
+    results.forEach(data => {
+        //Get relations if exists
+        let relations;
+        let spreadsheet = data.results;
+        let tabKeys = Object.keys(spreadsheet);
 
-			//Sort by files and locales
-			let files = {};
-			Object.keys(parsedTabs)
-				.filter(filterTabNames)
-				.forEach(tabName =>
-				{
-					let {rows, localizedRows} = parsedTabs[tabName];
-					let locales = Object.keys(localizedRows);
+        //Check if there is a relation tab
+        if (tabKeys.includes(relationKey)) {
+            relations = parseRelations(spreadsheet[relationKey].rows);
 
-					if(locales.length)
-					{
-						locales.forEach(locale =>
-						{
-							//Create locale
-							if(typeof files[locale] === 'undefined')
-							{
-								files[locale] = {};
-							}
+            //Remove it from keys
+            let idx = tabKeys.indexOf(relationKey);
+            tabKeys.splice(idx, 1);
+        }
 
-							rows = rows.map((row, index) =>
-							{
-								let localized = localizedRows[locale][index];
-								return Object.assign(row, localized);
-							});
+        //Parse tabs regular tabs
+        let parsedTabs = tabKeys.map(parseTab.bind(this, spreadsheet));
 
-							parsedTabs[tabName].rows = rows;
-							console.log(rows);
-							files[locale][tabName] = parsedTabs[tabName].rows;
-						});
-					}
-					else
-					{
-						if(typeof files[data.title] === 'undefined')
-						{
-							files[data.title] = {};
-						}
+        //Merge tabs
+        parsedTabs = Object.assign(...parsedTabs);
 
-						let tab = tabName;
-						if(parsedTabs[tabName].isDict)
-						{
-							let dict = {};
-							rows.forEach(convertRowToDict.bind(this, dict));
-							tab = Parsers.cleanDict(tabName);
-							rows = dict;
+        //Once we have all well parsed, let's check relations
+        if (typeof relations !== 'undefined') {
+            applyRelations(relations, parsedTabs);
+        }
 
-						}
-						else if(parsedTabs[tabName].isObjParse)
-						{
-							tab = Parsers.cleanObjParse(tabName);
-						}
+        //Sort by files and locales
+        let files = {};
+        Object.keys(parsedTabs)
+            .filter(filterTabNames)
+            .forEach(tabName => {
+                let {rows, localizedRows} = parsedTabs[tabName];
+                let locales = Object.keys(localizedRows);
 
-						files[data.title][tab] = rows;
-					}
-				});
+                if (locales.length) {
+                    locales.forEach(locale => {
+                        //Create locale
+                        if (typeof files[locale] === 'undefined') {
+                            files[locale] = {};
+                        }
 
-			//Save all files
-			writeAll(files);
-		})
+                        rows = rows.map((row, index) => {
+                            let localized = localizedRows[locale][index];
+                            return Object.assign(row, localized);
+                        });
 
-	})
+                        parsedTabs[tabName].rows = rows;
+                        console.log(rows);
+                        files[locale][tabName] = parsedTabs[tabName].rows;
+                    });
+                }
+                else {
+                    if (typeof files[data.title] === 'undefined') {
+                        files[data.title] = {};
+                    }
+
+                    let tab = tabName;
+                    if (parsedTabs[tabName].isDict) {
+                        let dict = {};
+                        rows.forEach(convertRowToDict.bind(this, dict));
+                        tab = Parsers.cleanDict(tabName);
+                        rows = dict;
+
+                    }
+                    else if (parsedTabs[tabName].isObjParse) {
+                        tab = Parsers.cleanObjParse(tabName);
+                    }
+
+                    files[data.title][tab] = rows;
+                }
+            });
+
+        //Save all files
+        writeAll(files);
+    });
+});
