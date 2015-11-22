@@ -7,6 +7,7 @@ Object.defineProperty(exports, '__esModule', {
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 exports.fecthSpreadsheet = fecthSpreadsheet;
+exports.loadSpreadsheets = loadSpreadsheets;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -34,31 +35,39 @@ var SpreadsheetController = (function () {
         this.sheet.useServiceAccountAuth(config.googleauth, this.init.bind(this, onReady));
     }
 
+    /**
+     * Fetch spreadsheet
+     * @param spId
+     * @param cleanSpaces
+     * @returns {exports|module.exports}
+     */
+
     _createClass(SpreadsheetController, [{
         key: 'init',
         value: function init(onReady) {
-            var self = this;
+            var _this = this;
+
             this.sheet.getInfo(function (err, sheet_info) {
-                self.data = sheet_info;
+                _this.data = sheet_info;
                 onReady();
             });
         }
     }, {
         key: 'getAll',
         value: function getAll() {
-            var _this = this;
+            var _this2 = this;
 
             var clean = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 
             return new Promise(function (resolve, reject) {
-                var iterables = _this.data.worksheets.map(function (element, index) {
-                    return _this.getRow(element, clean);
+                var iterables = _this2.data.worksheets.map(function (element, index) {
+                    return _this2.getRow(element, clean);
                 });
 
                 Promise.all(iterables).then(function (results) {
                     //results is an array of objects, each object being a worksheet
                     //now we merge all in one object
-                    resolve(Object.assign.apply(Object, _toConsumableArray(results)));
+                    resolve({ title: _this2.data.title, results: Object.assign.apply(Object, _toConsumableArray(results)) });
                 }, function (error) {
                     reject(error);
                 });
@@ -67,14 +76,14 @@ var SpreadsheetController = (function () {
     }, {
         key: 'getRow',
         value: function getRow(element, clean) {
-            var _this2 = this;
+            var _this3 = this;
 
             return new Promise(function (resolve, reject) {
                 element.getRows(function (err, rows) {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(_defineProperty({}, element.title, _this2.filter(rows, clean)));
+                        resolve(_defineProperty({}, element.title, _this3.filter(rows, clean)));
                     }
                 });
             });
@@ -84,26 +93,45 @@ var SpreadsheetController = (function () {
         value: function filter(rows, clean) {
             var filtered = [];
             var filteredRow = {};
+            var locales = {};
 
             for (var i = 0; i < rows.length; i++) {
                 filteredRow = {};
 
                 for (var key in rows[i]) {
                     if (rows[i].hasOwnProperty(key) && this._incompatibleTags.indexOf(key) === -1) {
-                        var filteredKey = '';
-                        if (key.indexOf('locale') === -1) {
+                        var filteredKey = undefined;
+                        var locale = undefined;
+                        var value = clean ? _Parsers2['default'].cleanSpaces(rows[i][key]) : rows[i][key];
+
+                        //Check if property is localized
+                        if (key.indexOf('-locale-') === -1) {
                             filteredKey = _Parsers2['default'].camelize(_Parsers2['default'].cleanSpaces(key));
+                            filteredRow[filteredKey] = value;
                         } else {
-                            filteredKey = _Parsers2['default'].cleanSpaces(key);
+                            filteredKey = _Parsers2['default'].camelize(_Parsers2['default'].cleanLocale(_Parsers2['default'].cleanSpaces(key)));
+                            locale = this.extractLocale(key);
+                            if (!locales.hasOwnProperty(locale)) {
+                                locales[locale] = _defineProperty({}, filteredKey, []);
+                            }
+
+                            locales[locale][filteredKey].push(value);
                         }
-                        filteredRow[filteredKey] = clean ? _Parsers2['default'].cleanSpaces(rows[i][key]) : rows[i][key];
+
+                        //filteredRow[filteredKey] = clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
                     }
                 }
 
                 filtered.push(filteredRow);
             }
 
-            return filtered;
+            return { rows: filtered, locales: locales };
+        }
+    }, {
+        key: 'extractLocale',
+        value: function extractLocale(propertyName) {
+            //Check if locale is present property name
+            return propertyName.split('-').pop();
         }
     }, {
         key: 'getCellsByWorksheetId',
@@ -135,6 +163,24 @@ function fecthSpreadsheet(sheet) {
             });
         });
     });
+}
+
+;
+
+/**
+ * Create a list of promises for spreadsheets
+ * @param list
+ * @returns {Array}
+ */
+
+function loadSpreadsheets(list) {
+
+    var metadata = [];
+    list.forEach(function (spreadsheet) {
+        metadata.push(fecthSpreadsheet(spreadsheet.id, JSON.parse(spreadsheet.cleanSpaces)));
+    });
+
+    return metadata;
 }
 
 ;

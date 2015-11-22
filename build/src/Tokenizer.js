@@ -29,8 +29,22 @@ var Tokenizer = (function () {
 		_classCallCheck(this, Tokenizer);
 	}
 
+	/**
+  * Check which rule to apply for the current element
+  * @param element
+  * @returns {*}
+  */
+
 	_createClass(Tokenizer, null, [{
 		key: 'discoverRegex',
+
+		/**
+   * Check if regex match
+   * @param element
+   * @param regexs
+   * @param regexName
+   * @returns {*}
+   */
 		value: function discoverRegex(element, regexs, regexName) {
 			if (element.match(regexs[regexName].regex)) {
 				return { regexName: regexName, element: element };
@@ -38,6 +52,12 @@ var Tokenizer = (function () {
 
 			return { element: element };
 		}
+
+		/**
+   * Apply correct regex
+   * @param regexElementCouple
+   * @returns {*}
+   */
 	}, {
 		key: 'parseElementByRegex',
 		value: function parseElementByRegex(regexElementCouple) {

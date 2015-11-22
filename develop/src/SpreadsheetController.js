@@ -14,9 +14,8 @@ class SpreadsheetController
     }
 
     init(onReady) {
-        var self = this;
         this.sheet.getInfo((err, sheet_info) => {
-            self.data = sheet_info;
+            this.data = sheet_info;
             onReady();
         });
     }
@@ -33,7 +32,7 @@ class SpreadsheetController
                 results => {
                     //results is an array of objects, each object being a worksheet
                     //now we merge all in one object
-                    resolve(Object.assign(...results));
+                    resolve({title: this.data.title, results: Object.assign(...results)});
                 },
                 error => {
                     reject(error);
@@ -54,33 +53,56 @@ class SpreadsheetController
         })
     }
 
-    filter(rows, clean) {
-        var filtered = [];
-        var filteredRow = {};
+    filter(rows, clean)
+    {
+        let filtered = [];
+        let filteredRow = {};
+        let locales = {};
 
-        for (var i = 0; i < rows.length; i++) {
+        for (var i = 0; i < rows.length; i++)
+        {
             filteredRow = {};
 
-            for (var key in rows[i]) {
+            for (var key in rows[i])
+            {
                 if (rows[i].hasOwnProperty(key) && this._incompatibleTags.indexOf(key) === -1)
                 {
-                    let filteredKey = '';
-                    if(key.indexOf('locale') === -1)
+                    let filteredKey;
+                    let locale;
+                    let value =  clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
+
+                    //Check if property is localized
+                    if(key.indexOf('-locale-') === -1)
                     {
                         filteredKey = Parsers.camelize(Parsers.cleanSpaces(key));
+                        filteredRow[filteredKey] = value;
                     }
                     else
                     {
-                        filteredKey = Parsers.cleanSpaces(key);
+                        filteredKey = Parsers.camelize(Parsers.cleanLocale(Parsers.cleanSpaces(key)));
+                        locale = this.extractLocale(key);
+                        if(!locales.hasOwnProperty(locale))
+                        {
+                            locales[locale] = {[filteredKey]: []};
+                        }
+
+                        locales[locale][filteredKey].push(value);
                     }
-                    filteredRow[filteredKey] = clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
+
+                    //filteredRow[filteredKey] = clean ? Parsers.cleanSpaces(rows[i][key]) : rows[i][key];
                 }
             }
 
             filtered.push(filteredRow);
         }
 
-        return filtered;
+        return {rows: filtered, locales};
+    }
+
+    extractLocale(propertyName)
+    {
+        //Check if locale is present property name
+        return propertyName.split('-').pop();
     }
 
     getCellsByWorksheetId(worksheetId, onReady) {
@@ -93,17 +115,37 @@ class SpreadsheetController
             }
         }
     }
-
 }
 
-export function fecthSpreadsheet(sheet, cleanSpaces = true) {
+/**
+ * Fetch spreadsheet
+ * @param spId
+ * @param cleanSpaces
+ * @returns {exports|module.exports}
+ */
+export function fecthSpreadsheet(spId, cleanSpaces = true) {
 
-    console.log(`Fetching data from ${sheet.name}`.bgBlue.white);
+    console.log(`Fetching data from ${spId}`.bgBlue.white);
     return new Promise((resolve, reject) => {
-        let spreadsheet = new SpreadsheetController(sheet.id, ()=> {
+        let spreadsheet = new SpreadsheetController(spId, ()=> {
             spreadsheet.getAll(cleanSpaces).then(data => resolve(data), error => reject(error));
         });
     });
+};
+
+/**
+ * Create a list of promises for spreadsheets
+ * @param list
+ * @returns {Array}
+ */
+export function loadSpreadsheets(list) {
+
+    let metadata = [];
+    list.forEach(spreadsheet => {
+      metadata.push(fecthSpreadsheet(spreadsheet.id, JSON.parse(spreadsheet.cleanSpaces)));
+    });
+
+    return metadata;
 };
 
 export default SpreadsheetController;

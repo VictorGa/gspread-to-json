@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 exports.write = write;
+exports.writeAll = writeAll;
 var sanitize = require("sanitize-filename");
 var fs = require('fs');
 var config = require('../../config.json');
@@ -35,4 +36,14 @@ function write(fileName, data, base) {
 		}
 	});
 }
+
+;
+
+function writeAll(files) {
+	Object.keys(files).forEach(function (fileName) {
+		write(fileName, files[fileName]);
+	});
+}
+
+;
 //# sourceMappingURL=FileWriter.js.map
