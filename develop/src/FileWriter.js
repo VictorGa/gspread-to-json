@@ -25,7 +25,7 @@ export function write(fileName, data, base)
 		else
 		{
 			console.log(`Creating file for: ${base + fileName + '.json'}`.underline.bold.blue);
-			fs.writeFileSync(base + fileName + '.json', output, {encoding :config.encoding});
+			fs.writeFileSync(base + fileName + '.json', output, {encoding: config.encoding});
 		}
 	})
 };

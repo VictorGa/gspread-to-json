@@ -29,6 +29,7 @@ class Tokenizer {
 	static parseElementByRegex(regexElementCouple)
 	{
 		let result = regexElementCouple.element;
+
 		if(Regexs[regexElementCouple.regexName])
 		{
 			result = Regexs[regexElementCouple.regexName].parser(regexElementCouple.element);
@@ -47,9 +48,9 @@ class Tokenizer {
 export function parse(element)
 {
 	let parsed = Object.keys(Regexs).
-	map(Tokenizer.discoverRegex.bind(this, element, Regexs)).
-	filter(regexElement => typeof regexElement !== 'undefined').
-	map(Tokenizer.parseElementByRegex.bind(this));
+				map(Tokenizer.discoverRegex.bind(this, element, Regexs)).
+				filter(regexElement => typeof regexElement !== 'undefined').
+				map(Tokenizer.parseElementByRegex.bind(this));
 
 	if(parsed.length === 0)
 	{

@@ -50,6 +50,7 @@ Promise.all(loadSpreadsheets(config.spreadsheets))
 				applyRelations(relations, parsedTabs);
 			}
 
+
 			//Sort by files and locales
 			let files = {};
 			Object.keys(parsedTabs)
@@ -76,7 +77,6 @@ Promise.all(loadSpreadsheets(config.spreadsheets))
 							});
 
 							parsedTabs[tabName].rows = rows;
-							console.log(rows);
 							files[locale][tabName] = parsedTabs[tabName].rows;
 						});
 					}
@@ -107,6 +107,6 @@ Promise.all(loadSpreadsheets(config.spreadsheets))
 
 			//Save all files
 			writeAll(files);
-		})
+		});
 
-	})
+	});

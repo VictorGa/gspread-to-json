@@ -78,9 +78,6 @@ export function parseTab(spreadsheet, tab)
 		});
 
 		rows = spreadsheet[tab].rows.map(row => parseRow(row));
-
-		//Locales
-		console.log('>>> locales', localizedRows)
 	}
 
 	return {[tab]: {rows, isDict, isObjParse, localizedRows, isLocalized: typeof spreadsheet[tab].locales !== 'undefined'}};

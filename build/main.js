@@ -38,7 +38,6 @@ function filterTabNames(tabName) {
 Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)).then(function (results) {
 	//Build Id links
 	results.forEach(function (data) {
-		console.log(data);
 		//Get relations if exists
 		var relations = undefined;
 		var spreadsheet = data.results;
@@ -86,7 +85,6 @@ Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)
 					});
 
 					parsedTabs[tabName].rows = rows;
-					console.log(rows);
 					files[locale][tabName] = parsedTabs[tabName].rows;
 				});
 			} else {
@@ -104,7 +102,6 @@ Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)
 					tab = _srcParsers2['default'].cleanObjParse(tabName);
 				}
 
-				console.log('>>> dict', data.title, rows);
 				files[data.title][tab] = rows;
 			}
 		});
