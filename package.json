@@ -11,8 +11,10 @@
   "author": "",
   "license": "Victor Garrido",
   "devDependencies": {
-    "babelify": "^6.1.2",
-    "node-inspector": "^0.12.3"
+    "node-inspector": "^0.12.3",
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-cli": "~0.1.13"
   },
   "dependencies": {
     "babel": "^5.8.23",
