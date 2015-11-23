@@ -18,18 +18,35 @@ export function filterTabNames(tabName) {
 
 export function processEnv() {
     // print process.argv
-    let spreadsheetNames = [];
     let _config = config.spreadsheets;
-    process.argv.forEach(function (val, index, array) {
-        if (val.indexOf('spreadfile') !== -1) {
-            let name = val.split(':').pop();
-            spreadsheetNames.push(name);
+    let nameIdx = -1;
+
+    process.argv.forEach((val, index, array) => {
+        if (val === '-n') {
+            nameIdx = index;
         }
     });
 
+
+    //Get all names
+    let spreadsheetNames = process.argv.splice(nameIdx, process.argv.length);
+    let spreadsheetConfigs = [];
+
     // Get spreadsheet config (id, name)
-    return spreadsheetNames.map(spreadsheetName => _config.find(({name}) => spreadsheetName === name))
-        .filter(spreadsheetConfig => typeof spreadsheetConfig !== 'undefined');
+    spreadsheetNames.forEach(spreadsheetName =>
+    {
+        let spreadsheetConfig = _config.find(({name}) => spreadsheetName === name);
+        console.log(spreadsheetConfig)
+
+        if (typeof spreadsheetConfig === 'undefined')
+        {
+            console.log(`No configuration found for ${spreadsheetName}`.bgRed.white);
+        }
+        else {
+            spreadsheetConfigs.push(spreadsheetConfig);
+        }
+    });
+    return spreadsheetConfigs;
 }
 
 
@@ -42,8 +59,7 @@ if (!spreadsheets.length) {
 //Fetch spreadsheets
 let spreadsheetsLoaded = Promise.all(loadSpreadsheets(spreadsheets));
 
-spreadsheetsLoaded.then(results =>
-{
+spreadsheetsLoaded.then(results => {
     //Build Id links
     results.forEach(data => {
         //Get relations if exists
@@ -92,7 +108,6 @@ spreadsheetsLoaded.then(results =>
                         });
 
                         parsedTabs[tabName].rows = rows;
-                        console.log(rows);
                         files[locale][tabName] = parsedTabs[tabName].rows;
                     });
                 }

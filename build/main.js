@@ -38,24 +38,33 @@ function filterTabNames(tabName) {
 
 function processEnv() {
     // print process.argv
-    var spreadsheetNames = [];
     var _config = config.spreadsheets;
+    var nameIdx = -1;
+
     process.argv.forEach(function (val, index, array) {
-        if (val.indexOf('spreadfile') !== -1) {
-            var _name = val.split(':').pop();
-            spreadsheetNames.push(_name);
+        if (val === '-n') {
+            nameIdx = index;
         }
     });
 
+    var spreadsheetNames = process.argv.splice(nameIdx, process.argv.length);
+    var spreadsheetConfigs = [];
+
     // Get spreadsheet config (id, name)
-    return spreadsheetNames.map(function (spreadsheetName) {
-        return _config.find(function (_ref) {
+    spreadsheetNames.forEach(function (spreadsheetName) {
+        var spreadsheetConfig = _config.find(function (_ref) {
             var name = _ref.name;
             return spreadsheetName === name;
         });
-    }).filter(function (spreadsheetConfig) {
-        return typeof spreadsheetConfig !== 'undefined';
+        console.log(spreadsheetConfig);
+
+        if (typeof spreadsheetConfig === 'undefined') {
+            console.log(('No configuration found for ' + spreadsheetName).bgRed.white);
+        } else {
+            spreadsheetConfigs.push(spreadsheetConfig);
+        }
     });
+    return spreadsheetConfigs;
 }
 
 // Check input
@@ -64,7 +73,6 @@ if (!spreadsheets.length) {
     spreadsheets = config.spreadsheets;
 }
 
-console.log('>>>', spreadsheets);
 //Fetch spreadsheets
 var spreadsheetsLoaded = Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(spreadsheets));
 
@@ -118,7 +126,6 @@ spreadsheetsLoaded.then(function (results) {
                     });
 
                     parsedTabs[tabName].rows = rows;
-                    console.log(rows);
                     files[locale][tabName] = parsedTabs[tabName].rows;
                 });
             } else {
