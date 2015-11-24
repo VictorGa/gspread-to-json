@@ -46,6 +46,28 @@ For example:
 
 npm run start -n Test
 
+# Supported tab types
+
+- [name]__obj_parse : Indicates the tab contains a 'dot' separeted properties that need to be parsed as an object.
+- [name]__dict : Indicates the tab will be parse as a dictionary. ´id´ column must exist.
+
+# Supported cell values
+
+- Arrays as [1,2,3]
+- JSON objects as {"lat": 1, "lon":40}
+- Strings
+- Numbers
+
+# Locales
+
+You can set different locales for a tab just by setting the locale in the column.
+
+For example if you want to have 'en' and 'es' locale it should look like this:
+
+![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/locale.png =250x)
+
+This will generate a file per locale with the information of that tab.
+
 # Creating relations
 
 You can create relations within different tabs as follows:
@@ -54,7 +76,9 @@ You can create relations within different tabs as follows:
 - `Two columns one called tab-a and the other tab-b`
 - `Third column called relation`
 
-![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/relation.png)
+![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/relation.png =250x)
+
+In this example, the objects in `test2` tab will be placed in `test3` tab linked by id.
 
 
 
