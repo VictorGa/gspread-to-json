@@ -7,7 +7,6 @@ exports.write = write;
 exports.writeAll = writeAll;
 var sanitize = require("sanitize-filename");
 var fs = require('fs');
-var config = require('../../config.json');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var colors = require('colors');
@@ -20,7 +19,7 @@ var colors = require('colors');
  */
 
 function write(fileName, data) {
-	var base = arguments.length <= 2 || arguments[2] === undefined ? config.savePath : arguments[2];
+	var base = arguments.length <= 2 || arguments[2] === undefined ? GLOBAL.config.savePath : arguments[2];
 
 	if (typeof base === 'undefined') base = './';
 

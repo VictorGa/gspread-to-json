@@ -1,6 +1,5 @@
 var sanitize = require("sanitize-filename");
 var fs = require('fs');
-var config = require('../../config.json');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var colors = require('colors');
@@ -11,7 +10,7 @@ var colors = require('colors');
  * @param data
  * @param base
  */
-export function write(fileName, data, base = config.savePath)
+export function write(fileName, data, base = GLOBAL.config.savePath)
 {
 	if (typeof base === 'undefined') base = './';
 
