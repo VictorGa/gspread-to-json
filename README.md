@@ -37,6 +37,25 @@ Spreadsheet id's:
 
 If name is not set it, the file parsed will be with spreadsheet title set.
 
+# Command line
+
+By default, all spreadsheets present in 'spreadsheets' array will be parsed. In case you want to parse a specific spreadsheet
+you can you the command line argument -n followed by the name of the spreadsheet.
+
+For example:
+
+npm run start -n Test
+
+# Creating relations
+
+You can create relations within different tabs as follows:
+
+- `Create a tab with the name __relation__`
+- `Two columns one called tab-a and the other tab-b`
+- `Third column called relation`
+
+![alt tag](https://raw.github.com/username/projectname/branch/path/to/img.png)
+
 
 
 
