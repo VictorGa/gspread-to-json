@@ -64,7 +64,7 @@ You can set different locales for a tab just by setting the locale in the column
 
 For example if you want to have 'en' and 'es' locale it should look like this:
 
-![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/locale.png =250x)
+![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/locale.png)
 
 This will generate a file per locale with the information of that tab.
 
@@ -76,7 +76,7 @@ You can create relations within different tabs as follows:
 - `Two columns one called tab-a and the other tab-b`
 - `Third column called relation`
 
-![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/relation.png =250x)
+![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/relation.png)
 
 In this example, the objects in `test2` tab will be placed in `test3` tab linked by id.
 
