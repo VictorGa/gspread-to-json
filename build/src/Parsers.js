@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Collection of different parsers used in
+ * spreadsheet.
+ */
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -13,6 +17,12 @@ var Parsers = (function () {
 		_classCallCheck(this, Parsers);
 	}
 
+	/**
+  * Convert string to a array
+  * @param str
+  * @returns {Array|*}
+  */
+
 	_createClass(Parsers, null, [{
 		key: 'toArray',
 		value: function toArray(str) {
@@ -20,6 +30,15 @@ var Parsers = (function () {
 
 			return str;
 		}
+
+		/**
+   * Parse 'x.y.z = 10' to a object as
+   * {x: {y: {z: 10}}}
+   * @param namespace
+   * @param value
+   * @param parsed
+   * @returns {*}
+   */
 	}, {
 		key: 'deepen',
 		value: function deepen(namespace, value, parsed) {
@@ -37,6 +56,12 @@ var Parsers = (function () {
 			}
 			return parsed;
 		}
+
+		/**
+   * Camelize dash separated string
+   * @param str
+   * @returns {string|XML|void|*}
+   */
 	}, {
 		key: 'camelize',
 		value: function camelize(str) {
@@ -44,11 +69,25 @@ var Parsers = (function () {
 				return group1.toUpperCase();
 			});
 		}
+
+		/**
+   * Remove blank spaces
+   * @param str
+   * @returns {string|XML|void|*}
+   */
 	}, {
 		key: 'cleanSpaces',
 		value: function cleanSpaces(str) {
 			return str.replace(/\s+/g, '');
 		}
+
+		/**
+   * Remove locale key from string.
+   * Rebuild the string back without -locale- and
+   * locale value itself
+   * @param str
+   * @returns {*}
+   */
 	}, {
 		key: 'cleanLocale',
 		value: function cleanLocale(str) {
@@ -61,11 +100,23 @@ var Parsers = (function () {
 
 			return str;
 		}
+
+		/**
+   * Remove __dict key
+   * @param str
+   * @returns {string|XML|void|*}
+   */
 	}, {
 		key: 'cleanDict',
 		value: function cleanDict(str) {
 			return str.replace('__dict', '');
 		}
+
+		/**
+   * Remove __obj_parse key
+   * @param str
+   * @returns {string|XML|void|*}
+   */
 	}, {
 		key: 'cleanObjParse',
 		value: function cleanObjParse(str) {
