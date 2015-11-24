@@ -54,7 +54,7 @@ You can create relations within different tabs as follows:
 - `Two columns one called tab-a and the other tab-b`
 - `Third column called relation`
 
-![alt tag](https://raw.github.com/username/projectname/branch/path/to/img.png)
+![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/relation.png)
 
 
 
