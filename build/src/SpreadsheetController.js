@@ -26,13 +26,14 @@ var GoogleSpreadsheet = require("google-spreadsheet");
 var Promise = require('native-or-bluebird');
 
 var SpreadsheetController = (function () {
-    function SpreadsheetController(id, onReady) {
+    function SpreadsheetController(id, name, onReady) {
         _classCallCheck(this, SpreadsheetController);
 
         this._incompatibleTags = ['_links', 'save', 'del', 'content', '_xml'];
 
         this.sheet = new GoogleSpreadsheet(id);
         this.sheet.useServiceAccountAuth(config.googleauth, this.init.bind(this, onReady));
+        this.name = name;
     }
 
     /**
@@ -67,7 +68,8 @@ var SpreadsheetController = (function () {
                 Promise.all(iterables).then(function (results) {
                     //results is an array of objects, each object being a worksheet
                     //now we merge all in one object
-                    resolve({ title: _this2.data.title, results: Object.assign.apply(Object, _toConsumableArray(results)) });
+                    var title = typeof _this2.name === 'undefined' ? _this2.data.title : _this2.name;
+                    resolve({ title: title, results: Object.assign.apply(Object, _toConsumableArray(results)) });
                 }, function (error) {
                     reject(error);
                 });
@@ -150,12 +152,12 @@ var SpreadsheetController = (function () {
     return SpreadsheetController;
 })();
 
-function fecthSpreadsheet(spId) {
-    var cleanSpaces = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+function fecthSpreadsheet(spId, name) {
+    var cleanSpaces = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
     console.log(('Fetching data from ' + spId).bgBlue.white);
     return new Promise(function (resolve, reject) {
-        var spreadsheet = new SpreadsheetController(spId, function () {
+        var spreadsheet = new SpreadsheetController(spId, name, function () {
             spreadsheet.getAll(cleanSpaces).then(function (data) {
                 return resolve(data);
             }, function (error) {
@@ -177,7 +179,7 @@ function loadSpreadsheets(list) {
 
     var metadata = [];
     list.forEach(function (spreadsheet) {
-        metadata.push(fecthSpreadsheet(spreadsheet.id, JSON.parse(spreadsheet.cleanSpaces)));
+        metadata.push(fecthSpreadsheet(spreadsheet.id, spreadsheet.name, JSON.parse(spreadsheet.cleanSpaces)));
     });
 
     return metadata;

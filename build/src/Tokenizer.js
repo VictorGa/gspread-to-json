@@ -65,22 +65,7 @@ var Tokenizer = (function () {
 
 			if (_Regexs2['default'][regexElementCouple.regexName]) {
 				result = _Regexs2['default'][regexElementCouple.regexName].parser(regexElementCouple.element);
-
-				if (regexElementCouple.regexName === 'object') {
-					(function () {
-						console.log(result, 'object');
-						var result2 = {};
-						Object.keys(result).forEach(function (key) {
-							result2[key] = result[key];
-						});
-
-						result = result2;
-						console.log(result2, 'object');
-					})();
-				}
 			}
-
-			console.log(result);
 
 			return result;
 		}

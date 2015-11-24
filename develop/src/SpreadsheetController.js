@@ -5,12 +5,14 @@ var Promise = require('native-or-bluebird');
 
 class SpreadsheetController
 {
-    constructor(id, onReady)
+    constructor(id, name, onReady)
     {
         this._incompatibleTags = ['_links', 'save', 'del', 'content', '_xml'];
 
         this.sheet = new GoogleSpreadsheet(id);
         this.sheet.useServiceAccountAuth(config.googleauth, this.init.bind(this, onReady));
+        this.name = name;
+
     }
 
     init(onReady) {
@@ -32,7 +34,8 @@ class SpreadsheetController
                 results => {
                     //results is an array of objects, each object being a worksheet
                     //now we merge all in one object
-                    resolve({title: this.data.title, results: Object.assign(...results)});
+                    let title = typeof this.name === 'undefined' ? this.data.title : this.name;
+                    resolve({title: title, results: Object.assign(...results)});
                 },
                 error => {
                     reject(error);
@@ -123,11 +126,11 @@ class SpreadsheetController
  * @param cleanSpaces
  * @returns {exports|module.exports}
  */
-export function fecthSpreadsheet(spId, cleanSpaces = true) {
+export function fecthSpreadsheet(spId, name, cleanSpaces = true) {
 
     console.log(`Fetching data from ${spId}`.bgBlue.white);
     return new Promise((resolve, reject) => {
-        let spreadsheet = new SpreadsheetController(spId, ()=> {
+        let spreadsheet = new SpreadsheetController(spId, name, ()=> {
             spreadsheet.getAll(cleanSpaces).then(data => resolve(data), error => reject(error));
         });
     });
@@ -142,7 +145,7 @@ export function loadSpreadsheets(list) {
 
     let metadata = [];
     list.forEach(spreadsheet => {
-      metadata.push(fecthSpreadsheet(spreadsheet.id, JSON.parse(spreadsheet.cleanSpaces)));
+      metadata.push(fecthSpreadsheet(spreadsheet.id, spreadsheet.name, JSON.parse(spreadsheet.cleanSpaces)));
     });
 
     return metadata;

@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 exports.filterTabNames = filterTabNames;
+exports.processEnv = processEnv;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -35,7 +36,38 @@ function filterTabNames(tabName) {
 	return tabName !== relationKey;
 }
 
-Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)).then(function (results) {
+function processEnv() {
+	// print process.argv
+	var spreadsheetNames = [];
+	var _config = config.spreadsheets;
+	process.argv.forEach(function (val, index, array) {
+		if (val.indexOf('spreadfile') !== -1) {
+			var _name = val.split(':').pop();
+			spreadsheetNames.push(_name);
+		}
+	});
+
+	// Get spreadsheet config (id, name)
+	return spreadsheetNames.map(function (spreadsheetName) {
+		return _config.find(function (_ref) {
+			var name = _ref.name;
+			return spreadsheetName === name;
+		});
+	}).filter(function (spreadsheetConfig) {
+		return typeof spreadsheetConfig !== 'undefined';
+	});
+}
+
+// Check input
+var spreadsheets = processEnv();
+if (!spreadsheets.length) {
+	spreadsheets = config.spreadsheets;
+}
+
+//Fetch spreadsheets
+var spreadsheetsLoaded = Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(spreadsheets));
+
+spreadsheetsLoaded.then(function (results) {
 	//Build Id links
 	results.forEach(function (data) {
 		//Get relations if exists
@@ -102,6 +134,7 @@ Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(config.spreadsheets)
 					tab = _srcParsers2['default'].cleanObjParse(tabName);
 				}
 
+				console.log('>>>', rows);
 				files[data.title][tab] = rows;
 			}
 		});
