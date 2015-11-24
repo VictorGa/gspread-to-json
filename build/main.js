@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-	value: true
+    value: true
 });
 exports.filterTabNames = filterTabNames;
 exports.processEnv = processEnv;
@@ -33,114 +33,122 @@ var Promise = require('native-or-bluebird');
 var relationKey = '__relation__';
 
 function filterTabNames(tabName) {
-	return tabName !== relationKey;
+    return tabName !== relationKey;
 }
 
 function processEnv() {
-	// print process.argv
-	var spreadsheetNames = [];
-	var _config = config.spreadsheets;
-	process.argv.forEach(function (val, index, array) {
-		if (val.indexOf('spreadfile') !== -1) {
-			var _name = val.split(':').pop();
-			spreadsheetNames.push(_name);
-		}
-	});
+    // print process.argv
+    var _config = config.spreadsheets;
+    var nameIdx = -1;
 
-	// Get spreadsheet config (id, name)
-	return spreadsheetNames.map(function (spreadsheetName) {
-		return _config.find(function (_ref) {
-			var name = _ref.name;
-			return spreadsheetName === name;
-		});
-	}).filter(function (spreadsheetConfig) {
-		return typeof spreadsheetConfig !== 'undefined';
-	});
+    process.argv.forEach(function (val, index, array) {
+        if (val === '-n') {
+            nameIdx = index;
+        }
+    });
+
+    var spreadsheetNames = process.argv.splice(nameIdx, process.argv.length);
+    var spreadsheetConfigs = [];
+
+    // Get spreadsheet config (id, name)
+    spreadsheetNames.forEach(function (spreadsheetName) {
+        var spreadsheetConfig = _config.find(function (_ref) {
+            var name = _ref.name;
+            return spreadsheetName === name;
+        });
+        console.log(spreadsheetConfig);
+
+        if (typeof spreadsheetConfig === 'undefined') {
+            console.log(('No configuration found for ' + spreadsheetName).bgRed.white);
+        } else {
+            spreadsheetConfigs.push(spreadsheetConfig);
+        }
+    });
+    return spreadsheetConfigs;
 }
 
 // Check input
 var spreadsheets = processEnv();
 if (!spreadsheets.length) {
-	spreadsheets = config.spreadsheets;
+    spreadsheets = config.spreadsheets;
 }
 
 //Fetch spreadsheets
 var spreadsheetsLoaded = Promise.all((0, _srcSpreadsheetController.loadSpreadsheets)(spreadsheets));
 
 spreadsheetsLoaded.then(function (results) {
-	//Build Id links
-	results.forEach(function (data) {
-		//Get relations if exists
-		var relations = undefined;
-		var spreadsheet = data.results;
-		var tabKeys = Object.keys(spreadsheet);
+    //Build Id links
+    results.forEach(function (data) {
+        //Get relations if exists
+        var relations = undefined;
+        var spreadsheet = data.results;
+        var tabKeys = Object.keys(spreadsheet);
 
-		//Check if there is a relation tab
-		if (tabKeys.includes(relationKey)) {
-			relations = (0, _srcRelationParser.parseRelations)(spreadsheet[relationKey].rows);
+        //Check if there is a relation tab
+        if (tabKeys.includes(relationKey)) {
+            relations = (0, _srcRelationParser.parseRelations)(spreadsheet[relationKey].rows);
 
-			//Remove it from keys
-			var idx = tabKeys.indexOf(relationKey);
-			tabKeys.splice(idx, 1);
-		}
+            //Remove it from keys
+            var idx = tabKeys.indexOf(relationKey);
+            tabKeys.splice(idx, 1);
+        }
 
-		//Parse tabs regular tabs
-		var parsedTabs = tabKeys.map(_srcTabUtils.parseTab.bind(undefined, spreadsheet));
+        //Parse tabs regular tabs
+        var parsedTabs = tabKeys.map(_srcTabUtils.parseTab.bind(undefined, spreadsheet));
 
-		//Merge tabs
-		parsedTabs = Object.assign.apply(Object, _toConsumableArray(parsedTabs));
+        //Merge tabs
+        parsedTabs = Object.assign.apply(Object, _toConsumableArray(parsedTabs));
 
-		//Once we have all well parsed, let's check relations
-		if (typeof relations !== 'undefined') {
-			(0, _srcRelationParser.applyRelations)(relations, parsedTabs);
-		}
+        //Once we have all well parsed, let's check relations
+        if (typeof relations !== 'undefined') {
+            (0, _srcRelationParser.applyRelations)(relations, parsedTabs);
+        }
 
-		//Sort by files and locales
-		var files = {};
-		Object.keys(parsedTabs).filter(filterTabNames).forEach(function (tabName) {
-			var _parsedTabs$tabName = parsedTabs[tabName];
-			var rows = _parsedTabs$tabName.rows;
-			var localizedRows = _parsedTabs$tabName.localizedRows;
+        //Sort by files and locales
+        var files = {};
+        Object.keys(parsedTabs).filter(filterTabNames).forEach(function (tabName) {
+            var _parsedTabs$tabName = parsedTabs[tabName];
+            var rows = _parsedTabs$tabName.rows;
+            var localizedRows = _parsedTabs$tabName.localizedRows;
 
-			var locales = Object.keys(localizedRows);
+            var locales = Object.keys(localizedRows);
 
-			if (locales.length) {
-				locales.forEach(function (locale) {
-					//Create locale
-					if (typeof files[locale] === 'undefined') {
-						files[locale] = {};
-					}
+            if (locales.length) {
+                locales.forEach(function (locale) {
+                    //Create locale
+                    if (typeof files[locale] === 'undefined') {
+                        files[locale] = {};
+                    }
 
-					rows = rows.map(function (row, index) {
-						var localized = localizedRows[locale][index];
-						return Object.assign(row, localized);
-					});
+                    rows = rows.map(function (row, index) {
+                        var localized = localizedRows[locale][index];
+                        return Object.assign(row, localized);
+                    });
 
-					parsedTabs[tabName].rows = rows;
-					files[locale][tabName] = parsedTabs[tabName].rows;
-				});
-			} else {
-				if (typeof files[data.title] === 'undefined') {
-					files[data.title] = {};
-				}
+                    parsedTabs[tabName].rows = rows;
+                    files[locale][tabName] = parsedTabs[tabName].rows;
+                });
+            } else {
+                if (typeof files[data.title] === 'undefined') {
+                    files[data.title] = {};
+                }
 
-				var tab = tabName;
-				if (parsedTabs[tabName].isDict) {
-					var dict = {};
-					rows.forEach(_srcTabUtils.convertRowToDict.bind(undefined, dict));
-					tab = _srcParsers2['default'].cleanDict(tabName);
-					rows = dict;
-				} else if (parsedTabs[tabName].isObjParse) {
-					tab = _srcParsers2['default'].cleanObjParse(tabName);
-				}
+                var tab = tabName;
+                if (parsedTabs[tabName].isDict) {
+                    var dict = {};
+                    rows.forEach(_srcTabUtils.convertRowToDict.bind(undefined, dict));
+                    tab = _srcParsers2['default'].cleanDict(tabName);
+                    rows = dict;
+                } else if (parsedTabs[tabName].isObjParse) {
+                    tab = _srcParsers2['default'].cleanObjParse(tabName);
+                }
 
-				console.log('>>>', rows);
-				files[data.title][tab] = rows;
-			}
-		});
+                files[data.title][tab] = rows;
+            }
+        });
 
-		//Save all files
-		(0, _srcFileWriter.writeAll)(files);
-	});
+        //Save all files
+        (0, _srcFileWriter.writeAll)(files);
+    });
 });
 //# sourceMappingURL=main.js.map

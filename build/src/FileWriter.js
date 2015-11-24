@@ -19,10 +19,10 @@ var colors = require('colors');
  * @param base
  */
 
-function write(fileName, data, base) {
-	if (base === void 0) {
-		base = config.savePath;
-	}
+function write(fileName, data) {
+	var base = arguments.length <= 2 || arguments[2] === undefined ? config.savePath : arguments[2];
+
+	if (typeof base === 'undefined') base = './';
 
 	var output = JSON.stringify(data, null, 2);
 	var dirname = path.dirname(base + fileName + '.json');
@@ -38,6 +38,11 @@ function write(fileName, data, base) {
 }
 
 ;
+
+/**
+ * Create json files
+ * @param files
+ */
 
 function writeAll(files) {
 	Object.keys(files).forEach(function (fileName) {
