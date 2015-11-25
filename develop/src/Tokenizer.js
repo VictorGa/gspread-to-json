@@ -32,14 +32,7 @@ class Tokenizer {
 
 		if(Regexs[regexElementCouple.regexName])
 		{
-			console.log('before>> ' ,regexElementCouple.element)
 			result = Regexs[regexElementCouple.regexName].parser(regexElementCouple.element);
-			console.log('after>> ' ,result)
-
-		}
-		else
-		{
-			console.log('else >>' ,regexElementCouple);
 		}
 
 		return result;
