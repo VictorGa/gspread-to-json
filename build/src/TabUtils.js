@@ -31,6 +31,7 @@ function parseRow(row) {
 		parsed[key] = (0, _Tokenizer.parse)(row[key]);
 	});
 
+	console.log('parsed >>> ', parsed);
 	return parsed;
 }
 

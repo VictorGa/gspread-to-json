@@ -26,6 +26,7 @@ function write(fileName, data) {
 	var output = JSON.stringify(data, null, 2);
 	var dirname = path.dirname(base + fileName + '.json');
 
+	console.log(data, output);
 	mkdirp(dirname, function (err) {
 		if (err) {
 			console.log(err);

@@ -64,7 +64,11 @@ var Tokenizer = (function () {
 			var result = regexElementCouple.element;
 
 			if (_Regexs2['default'][regexElementCouple.regexName]) {
+				console.log('before>> ', regexElementCouple.element);
 				result = _Regexs2['default'][regexElementCouple.regexName].parser(regexElementCouple.element);
+				console.log('after>> ', result);
+			} else {
+				console.log('else >>', regexElementCouple);
 			}
 
 			return result;
@@ -75,8 +79,9 @@ var Tokenizer = (function () {
 })();
 
 function parse(element) {
-	var parsed = Object.keys(_Regexs2['default']).map(Tokenizer.discoverRegex.bind(this, element, _Regexs2['default'])).filter(function (regexElement) {
-		return typeof regexElement !== 'undefined';
+	var parsed = Object.keys(_Regexs2['default']).map(Tokenizer.discoverRegex.bind(this, element, _Regexs2['default'])).filter(function (_ref) {
+		var regexName = _ref.regexName;
+		return typeof regexName !== 'undefined';
 	}).map(Tokenizer.parseElementByRegex.bind(this));
 
 	if (parsed.length === 0) {

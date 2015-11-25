@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+  value: true
 });
 
 var _regexs;
@@ -18,6 +18,10 @@ var _Parsers = require('./Parsers');
 
 var _Parsers2 = _interopRequireDefault(_Parsers);
 
+/**
+ * Regular expressions and parser for each
+ * @type {{}}
+ */
 var regexs = (_regexs = {}, _defineProperty(_regexs, _RegexNames2['default'].ARRAY, { regex: /^[\[][\w,;_ ]*[\]]$/gi, parser: _Parsers2['default'].toArray }), _defineProperty(_regexs, _RegexNames2['default'].DOT_SEPARATED, { regex: /^\w+(\.\w+)+$/gm, parser: _Parsers2['default'].deepen }), _defineProperty(_regexs, _RegexNames2['default'].OBJECT, { regex: /{([^}]+)}/, parser: JSON.parse }), _regexs);
 
 exports['default'] = regexs;

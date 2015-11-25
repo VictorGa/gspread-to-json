@@ -18,6 +18,7 @@ export function parseRow(row)
 		parsed[key] = parse(row[key]);
 	});
 
+	console.log('parsed >>> ', parsed);
 	return parsed;
 }
 
@@ -34,7 +35,7 @@ export function convertRowToDict(parent, row)
 		let clone = Object.assign({}, row);
 		delete clone.id;
 
-		console.log('>>> ',parent);
+		console.log('>>> converted ',parent);
 		parent[row.id] = clone;
 	}
 }

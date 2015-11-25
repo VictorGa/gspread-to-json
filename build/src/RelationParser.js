@@ -25,7 +25,6 @@ var tabFrom = 'tabFrom';
  */
 
 function parseRelations(relations) {
-
 	var relationsParsed = relations.map(function (relation) {
 		var relParsed = Object.assign({}, relation);
 		var rel = relation.relation.split('->').map(function (r) {
@@ -34,7 +33,6 @@ function parseRelations(relations) {
 		relParsed.relation = rel;
 		return relParsed;
 	});
-	console.log('>>>', relationsParsed);
 
 	return relationsParsed;
 }

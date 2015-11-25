@@ -32,7 +32,14 @@ class Tokenizer {
 
 		if(Regexs[regexElementCouple.regexName])
 		{
+			console.log('before>> ' ,regexElementCouple.element)
 			result = Regexs[regexElementCouple.regexName].parser(regexElementCouple.element);
+			console.log('after>> ' ,result)
+
+		}
+		else
+		{
+			console.log('else >>' ,regexElementCouple);
 		}
 
 		return result;
@@ -49,7 +56,7 @@ export function parse(element)
 {
 	let parsed = Object.keys(Regexs).
 				map(Tokenizer.discoverRegex.bind(this, element, Regexs)).
-				filter(regexElement => typeof regexElement !== 'undefined').
+				filter(({regexName}) => typeof regexName !== 'undefined').
 				map(Tokenizer.parseElementByRegex.bind(this));
 
 	if(parsed.length === 0)

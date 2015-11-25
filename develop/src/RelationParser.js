@@ -10,7 +10,6 @@ const tabFrom = 'tabFrom';
  */
 export function parseRelations(relations)
 {
-
 	let relationsParsed = relations.map(relation =>
 	{
 		let relParsed = Object.assign({}, relation);
@@ -18,7 +17,6 @@ export function parseRelations(relations)
 		relParsed.relation = rel;
 		return relParsed;
 	});
-	console.log('>>>', relationsParsed);
 
 	return relationsParsed;
 }
