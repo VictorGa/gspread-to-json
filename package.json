@@ -6,11 +6,14 @@
   "scripts": {
     "build": "babel --source-maps --out-dir build develop",
     "start": "node build/main.js",
+    "test": "mocha tests/unit --compilers js:babel/register --recursive",
     "watch": "watchify main.js -t babelify -o main.bundle.js --verbose --debug"
   },
   "author": "",
   "license": "Victor Garrido",
   "devDependencies": {
+    "chai": "^2.0.0",
+    "mocha": "^2.0.1",
     "node-inspector": "^0.12.3",
     "grunt": "~0.4.2",
     "grunt-contrib-uglify": "~0.2.4",

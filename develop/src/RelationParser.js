@@ -3,6 +3,12 @@ import Parsers from './Parsers';
 const tabInclude = 'tabInclude';
 const tabFrom = 'tabFrom';
 
+export const type = {
+	RIGHT: '->',
+	LEFT: '<-',
+	BOTH: '<->'
+}
+
 /**
  * Parse relation tab to a object
  * @param relations
@@ -13,8 +19,20 @@ export function parseRelations(relations)
 	let relationsParsed = relations.map(relation =>
 	{
 		let relParsed = Object.assign({}, relation);
-		let rel = relation.relation.split('->').map(r => Parsers.camelize(Parsers.cleanSpaces(r)));
+		let relationType = type.RIGHT;
+		if(relation.relation.indexOf(type.LEFT) !== -1)
+		{
+			relationType = type.LEFT;
+		}
+		else if(relation.relation.indexOf(type.BOTH) !== -1)
+		{
+			relationType = type.BOTH;
+		}
+
+		let rel = relation.relation.split(relationType).map(r => Parsers.camelize(Parsers.cleanSpaces(r)));
 		relParsed.relation = rel;
+		relParsed.type = relationType;
+
 		return relParsed;
 	});
 
