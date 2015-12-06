@@ -2,7 +2,6 @@ var sanitize = require("sanitize-filename");
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
-var colors = require('colors');
 
 /**
  * Write a json file to destination

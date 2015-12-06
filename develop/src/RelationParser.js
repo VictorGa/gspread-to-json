@@ -7,7 +7,7 @@ export const type = {
 	RIGHT: '->',
 	LEFT: '<-',
 	BOTH: '<->'
-}
+};
 
 /**
  * Parse relation tab to a object
@@ -54,10 +54,11 @@ export function applyRelations(relations, tabs)
 		let tabB = tabs[relation.tabB];
 		let [keyA, keyB] = relation.relation;
 
-		if(typeof tabA === 'undefinded' || typeof tabB === 'undefinded')
+		if(typeof tabA === 'undefined' || typeof tabB === 'undefined')
 		{
 			console.error('Relation ' + relation.tabA + '->' + relation.tabB + ' does not exist');
 		}
+
 		//TabA includes element from TabB
 		tabA.rows = tabA.rows.map(row =>
 		{
