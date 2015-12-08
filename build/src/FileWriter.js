@@ -9,7 +9,6 @@ var sanitize = require("sanitize-filename");
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
-var colors = require('colors');
 
 /**
  * Write a json file to destination
@@ -25,16 +24,18 @@ function write(fileName, data) {
 
 	var output = JSON.stringify(data, null, 2);
 	var dirname = path.dirname(base + fileName + '.json');
+	var url = { path: base + fileName + '.json', name: fileName };
 
-	console.log(data, output);
 	mkdirp(dirname, function (err) {
 		if (err) {
 			console.log(err);
 		} else {
-			console.log(('Creating file for: ' + (base + fileName + '.json')).underline.bold.blue);
-			fs.writeFileSync(base + fileName + '.json', output, { encoding: config.encoding });
+			//console.log(`Creating file for: ${url}`.underline.bold.blue);
+			fs.writeFileSync(url, output, { encoding: config.encoding });
 		}
 	});
+
+	return url;
 }
 
 ;
@@ -45,9 +46,12 @@ function write(fileName, data) {
  */
 
 function writeAll(files) {
+	var urls = [];
 	Object.keys(files).forEach(function (fileName) {
-		write(fileName, files[fileName]);
+		urls.push(write(fileName, files[fileName]));
 	});
+
+	return urls;
 }
 
 ;
