@@ -80,6 +80,12 @@ You can create relations within different tabs as follows:
 
 In this example, the objects in `test2` tab will be placed in `test3` tab linked by id.
 
+# Contributing
+
+You are more than welcome to contribute to this project.
+Please keep in mind that all unit tests should pass.
+
+
 
 
 

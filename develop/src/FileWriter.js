@@ -13,20 +13,23 @@ export function write(fileName, data, base = GLOBAL.config.savePath)
 {
 	if (typeof base === 'undefined') base = './';
 
-	var output = JSON.stringify(data, null, 2);
-	var dirname = path.dirname(base + fileName + '.json');
+	let output = JSON.stringify(data, null, 2);
+	let dirname = path.dirname(base + fileName + '.json');
+	let url = {path: base + fileName + '.json', name: fileName};
 
-	console.log(data, output);
 	mkdirp(dirname, (err) => {
-		if(err){
+		if(err)
+		{
 			console.log(err);
 		}
 		else
 		{
-			console.log(`Creating file for: ${base + fileName + '.json'}`.underline.bold.blue);
-			fs.writeFileSync(base + fileName + '.json', output, {encoding: config.encoding});
+			//console.log(`Creating file for: ${url}`.underline.bold.blue);
+			fs.writeFileSync(url, output, {encoding: config.encoding});
 		}
-	})
+	});
+
+	return url;
 };
 
 /**
@@ -35,9 +38,12 @@ export function write(fileName, data, base = GLOBAL.config.savePath)
  */
 export function writeAll(files)
 {
+	let urls = [];
 	Object.keys(files).forEach(fileName =>
 	{
-		write(fileName, files[fileName]);
+		urls.push(write(fileName, files[fileName]));
 	});
+
+	return urls;
 };
 

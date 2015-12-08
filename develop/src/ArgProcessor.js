@@ -31,7 +31,7 @@ export function processEnv()
 
 			if(typeof spreadsheetConfig === 'undefined')
 			{
-				console.log(`No configuration found for ${spreadsheetName}`.bgRed.white);
+				//console.log(`No configuration found for ${spreadsheetName}`.bgRed.white);
 			}
 			else
 			{

@@ -118,7 +118,7 @@ class SpreadsheetController {
  */
 export function fecthSpreadsheet (spId, name, cleanSpaces = true) {
 
-	console.log(`Fetching data from ${spId}`.bgBlue.white);
+	//console.log(`Fetching data from ${spId}`.bgBlue.white);
 	return new Promise((resolve, reject) => {
 		let spreadsheet = new SpreadsheetController(spId, name, ()=> {
 			spreadsheet.getAll(cleanSpaces).then(data => resolve(data), error => reject(error));

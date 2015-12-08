@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "build": "babel --source-maps --out-dir build develop",
-    "start": "node build/main.js",
+    "start": "node build/app.js",
     "test": "mocha tests/unit --compilers js:babel/register --recursive",
     "watch": "watchify main.js -t babelify -o main.bundle.js --verbose --debug"
   },
@@ -33,7 +33,8 @@
     "mkdirp": "^0.5.1",
     "native-or-bluebird": "^1.2.0",
     "sanitize-filename": "^1.3.0",
-    "js-tokenizer": "^1.3.3"
+    "js-tokenizer": "^1.3.3",
+    "express-zip": "^2.0.0"
   },
   "engines": {
     "npm": "2.7.4"
