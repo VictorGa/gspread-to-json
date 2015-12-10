@@ -25,7 +25,8 @@ export function write(fileName, data, base = GLOBAL.config.savePath)
 		else
 		{
 			//console.log(`Creating file for: ${url}`.underline.bold.blue);
-			fs.writeFileSync(url, output, {encoding: config.encoding});
+			console.log(`Creating file for: ${url.path}`);
+			fs.writeFileSync(url.path, output, {encoding: config.encoding});
 		}
 	});
 
