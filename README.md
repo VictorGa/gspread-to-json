@@ -80,6 +80,12 @@ You can create relations within different tabs as follows:
 
 In this example, the objects in `test2` tab will be placed in `test3` tab linked by id.
 
+# API RESTFul 
+
+You can run a node server (node build/server.js) to get access to RESTful API:
+
+parse/:spreadsheetId --> Download a zip file with all json files related with that spreadsheet.
+
 # Contributing
 
 You are more than welcome to contribute to this project.
