@@ -24,7 +24,7 @@ function write(fileName, data) {
 
 	var output = JSON.stringify(data, null, 2);
 	var dirname = path.dirname(base + fileName + '.json');
-	var url = { path: base + fileName + '.json', name: fileName };
+	var url = base + fileName + '.json';
 
 	mkdirp(dirname, function (err) {
 		if (err) {

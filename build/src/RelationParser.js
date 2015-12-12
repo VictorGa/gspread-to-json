@@ -18,6 +18,13 @@ var _Parsers2 = _interopRequireDefault(_Parsers);
 var tabInclude = 'tabInclude';
 var tabFrom = 'tabFrom';
 
+var type = {
+	RIGHT: '->',
+	LEFT: '<-',
+	BOTH: '<->'
+};
+
+exports.type = type;
 /**
  * Parse relation tab to a object
  * @param relations
@@ -27,10 +34,19 @@ var tabFrom = 'tabFrom';
 function parseRelations(relations) {
 	var relationsParsed = relations.map(function (relation) {
 		var relParsed = Object.assign({}, relation);
-		var rel = relation.relation.split('->').map(function (r) {
+		var relationType = type.RIGHT;
+		if (relation.relation.indexOf(type.LEFT) !== -1) {
+			relationType = type.LEFT;
+		} else if (relation.relation.indexOf(type.BOTH) !== -1) {
+			relationType = type.BOTH;
+		}
+
+		var rel = relation.relation.split(relationType).map(function (r) {
 			return _Parsers2['default'].camelize(_Parsers2['default'].cleanSpaces(r));
 		});
 		relParsed.relation = rel;
+		relParsed.type = relationType;
+
 		return relParsed;
 	});
 
@@ -55,9 +71,10 @@ function applyRelations(relations, tabs) {
 		var keyA = _relation$relation[0];
 		var keyB = _relation$relation[1];
 
-		if (typeof tabA === 'undefinded' || typeof tabB === 'undefinded') {
+		if (typeof tabA === 'undefined' || typeof tabB === 'undefined') {
 			console.error('Relation ' + relation.tabA + '->' + relation.tabB + ' does not exist');
 		}
+
 		//TabA includes element from TabB
 		tabA.rows = tabA.rows.map(function (row) {
 			var keys = row[keyA];

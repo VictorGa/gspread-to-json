@@ -158,7 +158,7 @@ var SpreadsheetController = (function () {
 function fecthSpreadsheet(spId, name) {
 	var cleanSpaces = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
-	console.log(('Fetching data from ' + spId).bgBlue.white);
+	//console.log(`Fetching data from ${spId}`.bgBlue.white);
 	return new Promise(function (resolve, reject) {
 		var spreadsheet = new SpreadsheetController(spId, name, function () {
 			spreadsheet.getAll(cleanSpaces).then(function (data) {

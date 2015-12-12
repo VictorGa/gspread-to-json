@@ -64,11 +64,7 @@ var Tokenizer = (function () {
 			var result = regexElementCouple.element;
 
 			if (_Regexs2['default'][regexElementCouple.regexName]) {
-				console.log('before>> ', regexElementCouple.element);
 				result = _Regexs2['default'][regexElementCouple.regexName].parser(regexElementCouple.element);
-				console.log('after>> ', result);
-			} else {
-				console.log('else >>', regexElementCouple);
 			}
 
 			return result;

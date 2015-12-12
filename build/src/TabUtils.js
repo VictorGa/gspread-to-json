@@ -31,7 +31,6 @@ function parseRow(row) {
 		parsed[key] = (0, _Tokenizer.parse)(row[key]);
 	});
 
-	console.log('parsed >>> ', parsed);
 	return parsed;
 }
 
@@ -47,7 +46,6 @@ function convertRowToDict(parent, row) {
 		var clone = Object.assign({}, row);
 		delete clone.id;
 
-		console.log('>>> ', parent);
 		parent[row.id] = clone;
 	}
 }
@@ -92,6 +90,12 @@ function parseTab(spreadsheet, tab) {
 		});
 	}
 
-	return _defineProperty({}, tab, { rows: rows, isDict: isDict, isObjParse: isObjParse, localizedRows: localizedRows, isLocalized: typeof spreadsheet[tab].locales !== 'undefined' });
+	return _defineProperty({}, tab, {
+		rows: rows,
+		isDict: isDict,
+		isObjParse: isObjParse,
+		localizedRows: localizedRows,
+		isLocalized: typeof spreadsheet[tab].locales !== 'undefined'
+	});
 }
 //# sourceMappingURL=TabUtils.js.map

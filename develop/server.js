@@ -7,19 +7,12 @@ let app = express();
 
 app.listen(process.env.PORT || 3412);
 
-/**
- * Download file
- * @param url
- * @param res
- * @param urls
- */
 function download(url, res, urls)
 {
 	if(urls.length)
 	{
-		console.log(url);
-		res.download(url.path, url.name, () => {
-			download(urls.pop(), res, urls)
+		res.download(url, 'test', () => {
+			download(urls.pop, res, urls);
 		});
 	}
 }
@@ -27,7 +20,7 @@ function download(url, res, urls)
 app.get('/parse/:id', function(req, res) {
 	let spreadsheet = [{id: req.params.id, name: 'test', cleanSpaces: false}];
 	execute(spreadsheet, (fileUrls)=>{
-		console.log(fileUrls);
+		//fileUrls.forEach(url => res.download(url, 'test')); // Set disposition and send it.)
 		download(fileUrls.pop(), res, fileUrls);
 	});
 });

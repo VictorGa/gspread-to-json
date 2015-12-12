@@ -15,7 +15,7 @@ export function write(fileName, data, base = GLOBAL.config.savePath)
 
 	let output = JSON.stringify(data, null, 2);
 	let dirname = path.dirname(base + fileName + '.json');
-	let url = {path: base + fileName + '.json', name: fileName};
+	let url = base + fileName + '.json';
 
 	mkdirp(dirname, (err) => {
 		if(err)
