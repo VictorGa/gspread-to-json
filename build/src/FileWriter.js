@@ -31,11 +31,12 @@ function write(fileName, data) {
 			console.log(err);
 		} else {
 			//console.log(`Creating file for: ${url}`.underline.bold.blue);
+			console.log('Creating file for: ' + url);
 			fs.writeFileSync(url, output, { encoding: config.encoding });
 		}
 	});
 
-	return url;
+	return { path: url, name: fileName + '.json' };
 }
 
 ;

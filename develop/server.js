@@ -12,6 +12,7 @@ app.listen(process.env.PORT || 3412);
 
 app.get('/parse/:id', function(req, res)
 {
+	console.log(req.params.id);
 	let spreadsheet = [{id: req.params.id, name: 'test', cleanSpaces: false}];
 
 	// Tell the browser that this is a zip file.
@@ -26,7 +27,6 @@ app.get('/parse/:id', function(req, res)
 	zip.pipe(res);
 
 	execute(spreadsheet, (fileUrls)=>{
-		console.log(fileUrls);
 		fileUrls.forEach(file => {
 			zip.append(fs.createReadStream(file.path), {name: file.name + '.json'});
 		});
