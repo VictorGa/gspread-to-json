@@ -35,9 +35,7 @@ new Vue({
 
 		fetchSpreadsheets: function()
 		{
-			this.ids.forEach(data => {
-				location.href = 'http://localhost:3412/parse/' + data.id;
-			})
+			location.href = 'http://localhost:3412/parse/' + this.ids.map((value) => value.id).join(',');
 		},
 
 		remove: function(sp)

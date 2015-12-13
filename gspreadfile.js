@@ -9,6 +9,11 @@ module.exports = {
       "id": "1ysXgX70c56Zx7IPcQ0lBtqurYfB636kJETZRPK0GZUM",
       "name": "name_test",
       "cleanSpaces": "false"
+    },
+    {
+      "id": "106EbKZhgO6KtWnbHBQ8h_e8CuVzCNHDxiU8xuTf5lm0",
+      "name": "Test2",
+      "cleanSpaces": "true"
     }
   ],
   "googleauth": {

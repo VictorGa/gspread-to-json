@@ -17,8 +17,6 @@ export function filterTabNames(tabName)
 export function execute(spreadsheets, callback = ()=>{})
 {
 
-	GLOBAL.config = require('../../gspreadfile.js');
-	GLOBAL.colors = require('colors');
 	GLOBAL.isNode = false;
 
 	console.log(GLOBAL.isNode);
@@ -28,6 +26,7 @@ export function execute(spreadsheets, callback = ()=>{})
 
 	spreadsheetsLoaded.then(results =>
 	{
+		console.log('>>> results' , results);
 		let fileUrls = [];
 		//Build Id links
 		results.forEach(data =>
@@ -116,7 +115,7 @@ export function execute(spreadsheets, callback = ()=>{})
 				  });
 
 			//Save all files
-			fileUrls = writeAll(files);
+			fileUrls = fileUrls.concat(writeAll(files));
 		});
 
 		callback(fileUrls);

@@ -36,8 +36,6 @@ function execute(spreadsheets) {
 
 	var callback = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
 
-	GLOBAL.config = require('../../gspreadfile.js');
-	GLOBAL.colors = require('colors');
 	GLOBAL.isNode = false;
 
 	console.log(GLOBAL.isNode);
@@ -46,6 +44,7 @@ function execute(spreadsheets) {
 	var spreadsheetsLoaded = Promise.all((0, _SpreadsheetController.loadSpreadsheets)(spreadsheets));
 
 	spreadsheetsLoaded.then(function (results) {
+		console.log('>>> results', results);
 		var fileUrls = [];
 		//Build Id links
 		results.forEach(function (data) {
@@ -120,7 +119,7 @@ function execute(spreadsheets) {
 			});
 
 			//Save all files
-			fileUrls = (0, _FileWriter.writeAll)(files);
+			fileUrls = fileUrls.concat((0, _FileWriter.writeAll)(files));
 		});
 
 		callback(fileUrls);

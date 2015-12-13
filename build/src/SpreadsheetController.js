@@ -73,7 +73,7 @@ var SpreadsheetController = (function () {
 				Promise.all(iterables).then(function (results) {
 					//results is an array of objects, each object being a worksheet
 					//now we merge all in one object
-					var title = typeof _this2.name === 'undefined' ? _this2.data.title : _this2.name;
+					var title = typeof _this2.name === 'undefined' || _this2.name == null ? _this2.data.title : _this2.name;
 					resolve({ title: title, results: Object.assign.apply(Object, _toConsumableArray(results)) });
 				}, function (error) {
 					reject(error);
@@ -181,6 +181,8 @@ function fecthSpreadsheet(spId, name) {
 function loadSpreadsheets(list) {
 
 	var metadata = [];
+	console.log(list);
+
 	list.forEach(function (spreadsheet) {
 		metadata.push(fecthSpreadsheet(spreadsheet.id, spreadsheet.name, JSON.parse(spreadsheet.cleanSpaces)));
 	});

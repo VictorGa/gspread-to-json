@@ -1,0 +1,32 @@
+.header {
+    margin: 50px;
+}
+
+.main {
+    margin: 0 50px;
+}
+
+.main .sp-list {
+    list-style-type: none;
+}
+
+.main .sp-list .sp .view label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.view button {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 20px;
+    background: indianred;
+    color: white;
+}
+
+.download {
+    margin: 0 50px;
+    font-size: 30px;
+    height: 50px;
+    background: darkseagreen;
+    color: white;
+}

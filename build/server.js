@@ -2,6 +2,8 @@
 
 var _srcMain = require('./src/main');
 
+GLOBAL.config = require('../gspreadfile.js');
+
 var express = require('express');
 var app = express();
 var Archiver = require('archiver');
@@ -11,7 +13,10 @@ app.listen(process.env.PORT || 3412);
 
 app.get('/parse/:id', function (req, res) {
 	console.log(req.params.id);
-	var spreadsheet = [{ id: req.params.id, name: 'test', cleanSpaces: false }];
+	var spreadsheets = [];
+	req.params.id.split(',').forEach(function (id) {
+		spreadsheets.push({ id: id, name: null, cleanSpaces: false });
+	});
 
 	// Tell the browser that this is a zip file.
 	res.writeHead(200, {
@@ -24,8 +29,7 @@ app.get('/parse/:id', function (req, res) {
 	// Send the file to the page output.
 	zip.pipe(res);
 
-	(0, _srcMain.execute)(spreadsheet, function (fileUrls) {
-		console.log(fileUrls);
+	(0, _srcMain.execute)(spreadsheets, function (fileUrls) {
 		fileUrls.forEach(function (file) {
 			zip.append(fs.createReadStream(file.path), { name: file.name + '.json' });
 		});

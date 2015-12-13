@@ -34,7 +34,7 @@ class SpreadsheetController {
 				results => {
 					//results is an array of objects, each object being a worksheet
 					//now we merge all in one object
-					let title = typeof this.name === 'undefined' ? this.data.title : this.name;
+					let title = typeof this.name === 'undefined' || this.name == null ? this.data.title : this.name;
 					resolve({title: title, results: Object.assign(...results)});
 				},
 				error => {
@@ -134,6 +134,8 @@ export function fecthSpreadsheet (spId, name, cleanSpaces = true) {
 export function loadSpreadsheets (list) {
 
 	let metadata = [];
+	console.log(list);
+
 	list.forEach(spreadsheet => {
 		metadata.push(fecthSpreadsheet(spreadsheet.id, spreadsheet.name, JSON.parse(spreadsheet.cleanSpaces)));
 	});

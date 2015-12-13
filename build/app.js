@@ -6,6 +6,9 @@ var _srcArgProcessor = require('./src/ArgProcessor');
 
 require("babel-core/polyfill");
 
+GLOBAL.config = require('../gspreadfile.js');
+GLOBAL.colors = require('colors');
+
 if (typeof module !== 'undefined' && module.exports) {
 	GLOBAL.isNode = true;
 }

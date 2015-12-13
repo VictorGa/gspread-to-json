@@ -3,6 +3,25 @@
 <head>
 	<meta charset="utf-8">
 	<title>Google spreadsheet to json</title>
+
+	<!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+	<!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" href="style/normalize.css">
+	<link rel="stylesheet" href="style/skeleton.css">
+	<link rel="stylesheet" href="style/style.css">
+
+	<!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="icon" type="image/png" href="images/favicon.png">
+
 	<style> [v-cloak] { display: none; } </style>
 </head>
 <body>
@@ -16,18 +35,18 @@
 			   @keyup.enter="addSpreadsheetId">
 	</header>
 	<section class="main" v-show="ids.length" v-cloak>
-		<ul class="todo-list">
-			<li class="todo"
+		<ul class="sp-list">
+			<li class="sp"
 				v-for="sp in ids"
 			>
 				<div class="view">
 					<label @dblclick="editTodo(todo)">{{sp.id}}</label>
-					<button class="destroy" @click="remove(sp)"></button>
+					<button class="destroy" @click="remove(sp)">Remove</button>
 				</div>
 			</li>
 		</ul>
 	</section>
-	<button @click="fetchSpreadsheets" v-show="ids.length"></button>
+	<button @click="fetchSpreadsheets" v-show="ids.length" class="download">Download</button>
 </section>
 <script src="app.bundle.js"></script>
 </body>
