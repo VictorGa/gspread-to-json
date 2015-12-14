@@ -17,6 +17,8 @@ export function write(fileName, data, folder, base = GLOBAL.config.savePath)
 	let url = base + folder + '/' + fileName + '.json';
 	let dirname = path.dirname(url);
 
+	console.log(`opening folder: ${dirname}`);
+
 	mkdirp(dirname, (err) => {
 		if(err)
 		{
@@ -26,7 +28,12 @@ export function write(fileName, data, folder, base = GLOBAL.config.savePath)
 		{
 			//console.log(`Creating file for: ${url}`.underline.bold.blue);
 			console.log(`Creating file for: ${url}`);
-			fs.writeFileSync(url, output, {encoding: config.encoding});
+			try {
+				fs.writeFileSync(url, output, {encoding: config.encoding});
+			}
+			catch (e) {
+				console.log(e)
+			}
 		}
 	});
 

@@ -31,7 +31,7 @@ new Vue({
 			if (!valueId) {
 				return;
 			}
-			this.ids.push({ id: valueId , name: valueName});
+			this.ids.push({ id: valueId , name: valueName, cleanSpaces: true});
 			this.newSpreadsheetId = '';
 			this.newSpreadsheetName = '';
 		},
@@ -41,7 +41,7 @@ new Vue({
 			$.ajax({
 				type: "POST",
 				url: "http://localhost:3412/parse",
-				data: {test: 'heelo', 'oooyeah': 12},
+				data: {data: this.ids},
 				xhrFields: {
 					withCredentials: true
 				}

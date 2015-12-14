@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../develop/src/RegexNames.js"],"names":[],"mappings":";;;;;AAAA,IAAI,KAAK,GACT;AACI,SAAK,EAAC,OAAO;AACb,iBAAa,EAAC,eAAe;AAC7B,UAAM,EAAC,QAAQ;CAClB,CAAA;;qBAEc,KAAK","file":"RegexNames.js","sourcesContent":["let names =\r\n{\r\n    ARRAY:'array',\r\n    DOT_SEPARATED:'dot-separated',\r\n    OBJECT:'object'\r\n}\r\n\r\nexport default names;"]}
