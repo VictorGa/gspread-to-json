@@ -7,7 +7,7 @@ module.exports = {
   "spreadsheets":[
     {
       "id": "1ysXgX70c56Zx7IPcQ0lBtqurYfB636kJETZRPK0GZUM",
-      "name": "name_test",
+      "name": "test",
       "cleanSpaces": "false"
     },
     {

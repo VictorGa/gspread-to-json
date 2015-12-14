@@ -1,7 +1,7 @@
 'use strict';
 
 const Vue = require('vue');
-const $ = require('Jquery');
+const $ = require('jquery');
 
 new Vue({
 	// the root element that will be compiled
@@ -10,6 +10,7 @@ new Vue({
 	data: {
 		ids: [],
 		newSpreadsheetId: '',
+		newSpreadsheetName: '',
 		editedTodo: null,
 		visibility: 'all'
 	},
@@ -25,17 +26,27 @@ new Vue({
 	methods: {
 		addSpreadsheetId: function()
 		{
-			var value = this.newSpreadsheetId && this.newSpreadsheetId.trim();
-			if (!value) {
+			var valueId = this.newSpreadsheetId && this.newSpreadsheetId.trim();
+			var valueName = this.newSpreadsheetName && this.newSpreadsheetName.trim();
+			if (!valueId) {
 				return;
 			}
-			this.ids.push({ id: value });
+			this.ids.push({ id: valueId , name: valueName});
 			this.newSpreadsheetId = '';
+			this.newSpreadsheetName = '';
 		},
 
 		fetchSpreadsheets: function()
 		{
-			location.href = 'http://localhost:3412/parse/' + this.ids.map((value) => value.id).join(',');
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:3412/parse",
+				data: {test: 'heelo', 'oooyeah': 12},
+				xhrFields: {
+					withCredentials: true
+				}
+			});
+			//location.href = 'http://localhost:3412/parse/' + this.ids.map((value) => value.id).join(',');
 		},
 
 		remove: function(sp)

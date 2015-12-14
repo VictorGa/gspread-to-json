@@ -26,13 +26,14 @@ export function execute(spreadsheets, callback = ()=>{})
 
 	spreadsheetsLoaded.then(results =>
 	{
-		console.log('>>> results' , results);
-		let fileUrls = [];
+		let fileUrls = {};
 		//Build Id links
 		results.forEach(data =>
 		{
+
 			//Get relations if exists
 			let relations;
+			let {title} = data;
 			let spreadsheet = data.results;
 			let tabKeys = Object.keys(spreadsheet);
 
@@ -115,7 +116,7 @@ export function execute(spreadsheets, callback = ()=>{})
 				  });
 
 			//Save all files
-			fileUrls = fileUrls.concat(writeAll(files));
+			fileUrls[title] = writeAll(files, title);
 		});
 
 		callback(fileUrls);

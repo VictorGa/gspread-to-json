@@ -9,13 +9,13 @@ var mkdirp = require('mkdirp');
  * @param data
  * @param base
  */
-export function write(fileName, data, base = GLOBAL.config.savePath)
+export function write(fileName, data, folder, base = GLOBAL.config.savePath)
 {
 	if (typeof base === 'undefined') base = './';
 
 	let output = JSON.stringify(data, null, 2);
-	let dirname = path.dirname(base + fileName + '.json');
-	let url = base + fileName + '.json';
+	let url = base + folder + '/' + fileName + '.json';
+	let dirname = path.dirname(url);
 
 	mkdirp(dirname, (err) => {
 		if(err)
@@ -37,12 +37,12 @@ export function write(fileName, data, base = GLOBAL.config.savePath)
  * Create json files
  * @param files
  */
-export function writeAll(files)
+export function writeAll(files, folder = '')
 {
 	let urls = [];
 	Object.keys(files).forEach(fileName =>
 	{
-		urls.push(write(fileName, files[fileName]));
+		urls.push(write(fileName, files[fileName], folder));
 	});
 
 	return urls;

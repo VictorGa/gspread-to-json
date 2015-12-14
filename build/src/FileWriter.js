@@ -17,14 +17,14 @@ var mkdirp = require('mkdirp');
  * @param base
  */
 
-function write(fileName, data) {
-	var base = arguments.length <= 2 || arguments[2] === undefined ? GLOBAL.config.savePath : arguments[2];
+function write(fileName, data, folder) {
+	var base = arguments.length <= 3 || arguments[3] === undefined ? GLOBAL.config.savePath : arguments[3];
 
 	if (typeof base === 'undefined') base = './';
 
 	var output = JSON.stringify(data, null, 2);
-	var dirname = path.dirname(base + fileName + '.json');
-	var url = base + fileName + '.json';
+	var url = base + folder + '/' + fileName + '.json';
+	var dirname = path.dirname(url);
 
 	mkdirp(dirname, function (err) {
 		if (err) {
@@ -47,9 +47,11 @@ function write(fileName, data) {
  */
 
 function writeAll(files) {
+	var folder = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+
 	var urls = [];
 	Object.keys(files).forEach(function (fileName) {
-		urls.push(write(fileName, files[fileName]));
+		urls.push(write(fileName, files[fileName], folder));
 	});
 
 	return urls;

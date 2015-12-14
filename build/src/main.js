@@ -44,12 +44,14 @@ function execute(spreadsheets) {
 	var spreadsheetsLoaded = Promise.all((0, _SpreadsheetController.loadSpreadsheets)(spreadsheets));
 
 	spreadsheetsLoaded.then(function (results) {
-		console.log('>>> results', results);
-		var fileUrls = [];
+		var fileUrls = {};
 		//Build Id links
 		results.forEach(function (data) {
+
 			//Get relations if exists
 			var relations = undefined;
+			var title = data.title;
+
 			var spreadsheet = data.results;
 			var tabKeys = Object.keys(spreadsheet);
 
@@ -119,7 +121,7 @@ function execute(spreadsheets) {
 			});
 
 			//Save all files
-			fileUrls = fileUrls.concat((0, _FileWriter.writeAll)(files));
+			fileUrls[title] = (0, _FileWriter.writeAll)(files, title);
 		});
 
 		callback(fileUrls);

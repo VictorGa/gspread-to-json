@@ -33,14 +33,21 @@
 			   placeholder="Add spreadsheet id"
 			   v-model="newSpreadsheetId"
 			   @keyup.enter="addSpreadsheetId">
+		<input class="new-sp"
+		       autofocus autocomplete="off"
+		       placeholder="File name"
+		       v-model="newSpreadsheetName"
+		       @keyup.enter="addSpreadsheetId">
+		<button class="add" @click="addSpreadsheetId">Add</button>
+
 	</header>
 	<section class="main" v-show="ids.length" v-cloak>
 		<ul class="sp-list">
 			<li class="sp"
-				v-for="sp in ids"
-			>
+				v-for="sp in ids">
 				<div class="view">
 					<label @dblclick="editTodo(todo)">{{sp.id}}</label>
+					<label @dblclick="editTodo(todo)">{{sp.name}}</label>
 					<button class="destroy" @click="remove(sp)">Remove</button>
 				</div>
 			</li>

@@ -17,67 +17,67 @@
   ],
   "test": {
     "home": {
-      "intro_title": "Jumeirah Inside",
-      "intro_text": "360 Degrees of Luxury",
-      "experience_button": "Step inside",
-      "around_the_world_button": "Or discover Jumeirah hotels around the world"
+      "intro_title": "JumeirahInside",
+      "intro_text": "360DegreesofLuxury",
+      "experience_button": "Stepinside",
+      "around_the_world_button": "OrdiscoverJumeirahhotelsaroundtheworld"
     },
     "panorama": {
       "previous": {
-        "suite": "Previous Suite",
-        "restaurant": "Previous Restaurant",
-        "bar": "Previous Bar",
-        "lobby": "Previous Lobby",
-        "spa": "Previous Spa"
+        "suite": "PreviousSuite",
+        "restaurant": "PreviousRestaurant",
+        "bar": "PreviousBar",
+        "lobby": "PreviousLobby",
+        "spa": "PreviousSpa"
       },
       "next": {
-        "suite": "Next Suite",
-        "restaurant": "Next Restaurant",
-        "bar": "Next Bar",
-        "lobby": "Next Lobby",
-        "spa": "Next Spa"
+        "suite": "NextSuite",
+        "restaurant": "NextRestaurant",
+        "bar": "NextBar",
+        "lobby": "NextLobby",
+        "spa": "NextSpa"
       },
       "info": "i",
-      "leave_burj_experience": "You are about to \nleave the Burj Al Arab \nJumeirah experience",
-      "visit_around_the_world": "Discover Jumeirah around the world",
+      "leave_burj_experience": "YouareabouttoleavetheBurjAlArabJumeirahexperience",
+      "visit_around_the_world": "DiscoverJumeiraharoundtheworld",
       "visit": "visit",
-      "back_icon": "Click the icon in the navigation bar to return to the Burj Al Arab Jumeirah experience",
-      "back_to_endpage": "Back to end page",
+      "back_icon": "ClicktheiconinthenavigationbartoreturntotheBurjAlArabJumeirahexperience",
+      "back_to_endpage": "Backtoendpage",
       "help": {
         "photos": "Photos",
         "knowledge": "Knowledge",
         "interactive": "Interactive",
         "video": "Video",
-        "next_area": "Next area",
+        "next_area": "Nextarea",
         "book": "Book",
         "audio": "Audio",
-        "chapter_selector": "Chapter selector",
-        "back_to_burj_al_arab": "Back to Burj Al Arab \rJumeirah",
-        "all_jumeirah_hotels": "All Jumeirah Hotels",
-        "book_now": "Book Now",
-        "info_and_map": "Info and mini map",
-        "explore_around_the_world": "Explore around the world",
-        "share_location": "Share current location",
-        "explore_other_suites": "Explore other suites",
+        "chapter_selector": "Chapterselector",
+        "back_to_burj_al_arab": "BacktoBurjAlArabJumeirah",
+        "all_jumeirah_hotels": "AllJumeirahHotels",
+        "book_now": "BookNow",
+        "info_and_map": "Infoandminimap",
+        "explore_around_the_world": "Explorearoundtheworld",
+        "share_location": "Sharecurrentlocation",
+        "explore_other_suites": "Exploreothersuites",
         "rotate": "Rotate",
-        "other_floor_chapter": "Other hotels / Floor plan / Chapter selector",
-        "explore_other": "Explore other locations in the current chapter",
-        "voice_over": "Voice over"
+        "other_floor_chapter": "Otherhotels/Floorplan/Chapterselector",
+        "explore_other": "Exploreotherlocationsinthecurrentchapter",
+        "voice_over": "Voiceover"
       },
-      "seen_hotspots": "seen hotspots"
+      "seen_hotspots": "seenhotspots"
     },
     "hotel_selector": {
-      "read_more_or_book_now": "Read more or Book on",
-      "step_inside": "Step Inside",
-      "read_more": "Read more"
+      "read_more_or_book_now": "ReadmoreorBookon",
+      "step_inside": "StepInside",
+      "read_more": "Readmore"
     },
     "book_now": {
-      "stay_with_jumeirah": "Stay with Jumeirah",
-      "check_in": "Check in",
-      "check_out": "Check out",
+      "stay_with_jumeirah": "StaywithJumeirah",
+      "check_in": "Checkin",
+      "check_out": "Checkout",
       "rooms": "Rooms",
       "room": "Room",
-      "check_availability": "Check availability",
+      "check_availability": "Checkavailability",
       "selected": "Selected",
       "available": "Available",
       "unavailable": "Unavailable",
@@ -85,50 +85,50 @@
       "children": "Children({value})"
     },
     "about": {
-      "title": "About Jumeirah Inside"
+      "title": "AboutJumeirahInside"
     },
     "endscreen": {
-      "title": "These were the key hotspots along the way",
-      "view_content": "View the content",
-      "see_in_sphere": "See in sphere",
-      "share_experience": "Share this experience with your friends",
-      "open_hotspot_list": "Open the list with all hotspots",
-      "around_the_world_button": "Discover Jumeirah hotels around the world"
+      "title": "Thesewerethekeyhotspotsalongtheway",
+      "view_content": "Viewthecontent",
+      "see_in_sphere": "Seeinsphere",
+      "share_experience": "Sharethisexperiencewithyourfriends",
+      "open_hotspot_list": "Openthelistwithallhotspots",
+      "around_the_world_button": "DiscoverJumeirahhotelsaroundtheworld"
     },
     "jumeirah_com": "jumeirah.com",
     "jumeirah": "Jumeirah",
-    "burj_al_arab": "Burj Al Arab",
+    "burj_al_arab": "BurjAlArab",
     "around_the_world": {
-      "jumeirah_around_the_world": "Jumeirah hotels around the world"
+      "jumeirah_around_the_world": "Jumeirahhotelsaroundtheworld"
     },
     "mobile_nav": {
-      "burj_experience": "Burj Al Arab Experience",
-      "jumeirah_worldwide": "Jumeirah hotels worldwide",
-      "book_now": "Book now",
+      "burj_experience": "BurjAlArabExperience",
+      "jumeirah_worldwide": "Jumeirahhotelsworldwide",
+      "book_now": "Booknow",
       "share": "Share",
-      "change_language": "Change language",
+      "change_language": "Changelanguage",
       "subtitles": "Subtitles",
       "sound": "Sound",
       "gyroscope": "Gyroscope",
       "on": "On",
       "off": "Off",
       "tutorial": "Tutorial",
-      "privacy_terms": "Privacy and Terms"
+      "privacy_terms": "PrivacyandTerms"
     },
     "footer": {
-      "in_collaboration_with": "in collaboration with",
-      "type_around_the_world": "{type} around the world",
-      "see_type_around_the_world": "See {type} around the world",
-      "book_suite": "Book now",
-      "privacy_terms": "Privacy and Terms",
+      "in_collaboration_with": "incollaborationwith",
+      "type_around_the_world": "{type}aroundtheworld",
+      "see_type_around_the_world": "See{type}aroundtheworld",
+      "book_suite": "Booknow",
+      "privacy_terms": "PrivacyandTerms",
       "about": "About",
       "share": "Share",
-      "book_suite_text": "Esse cillum dolore eu fugiat nulla pa sit ripsu atur. Lorem ipsum dolor sit amet, ipsum contrm sectetur.",
-      "book_suite_button": "Book now",
-      "hotels_around_the_world": "Hotels around the World",
+      "book_suite_text": "Essecillumdoloreeufugiatnullapasitripsuatur.Loremipsumdolorsitamet,ipsumcontrmsectetur.",
+      "book_suite_button": "Booknow",
+      "hotels_around_the_world": "HotelsaroundtheWorld",
       "jumeirah_logo_link": "http://www.jumeirah.com/"
     },
-    "skip_video": "Skip video",
+    "skip_video": "Skipvideo",
     "date": {
       "day": {
         "su": "SU",
