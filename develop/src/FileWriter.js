@@ -11,7 +11,10 @@ var mkdirp = require('mkdirp');
  */
 export function write(fileName, data, folder, base = GLOBAL.config.savePath)
 {
-	if (typeof base === 'undefined') base = './';
+	if(typeof base === 'undefined')
+	{
+		base = './';
+	}
 
 	let output = JSON.stringify(data, null, 2);
 	let url = base + folder + '/' + fileName + '.json';
@@ -19,25 +22,31 @@ export function write(fileName, data, folder, base = GLOBAL.config.savePath)
 
 	console.log(`opening folder: ${dirname}`);
 
-	mkdirp(dirname, (err) => {
-		if(err)
+	return new Promise((resolve, reject) =>
+	{
+		mkdirp(dirname, (err) =>
 		{
-			console.log(err);
-		}
-		else
-		{
-			//console.log(`Creating file for: ${url}`.underline.bold.blue);
-			console.log(`Creating file for: ${url}`);
-			try {
-				fs.writeFileSync(url, output, {encoding: config.encoding});
+			if(err)
+			{
+				reject(err);
 			}
-			catch (e) {
-				console.log(e)
+			else
+			{
+				//console.log(`Creating file for: ${url}`.underline.bold.blue);
+				console.log(`Creating file for: ${url}`);
+				try
+				{
+					process.umask(0);
+					fs.writeFileSync(url, output, {encoding: config.encoding, mode: parseInt('0755', 8)});
+					resolve({path: url, name: fileName + '.json'});
+				}
+				catch(e)
+				{
+					console.log(e)
+				}
 			}
-		}
+		});
 	});
-
-	return {path: url, name: fileName + '.json'};
 };
 
 /**
@@ -47,11 +56,12 @@ export function write(fileName, data, folder, base = GLOBAL.config.savePath)
 export function writeAll(files, folder = '')
 {
 	let urls = [];
+	let promiseFiles = [];
 	Object.keys(files).forEach(fileName =>
 	{
-		urls.push(write(fileName, files[fileName], folder));
+		promiseFiles.push(write(fileName, files[fileName], folder));
 	});
 
-	return urls;
+	return Promise.all(promiseFiles);
 };
 

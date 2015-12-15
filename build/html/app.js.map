@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../html/app.js"],"names":[],"mappings":"AAAA,YAAY,CAAC;;AAEb,IAAM,GAAG,GAAG,OAAO,CAAC,KAAK,CAAC,CAAC;;AAE3B,IAAI,GAAG,CAAC;;AAEP,GAAE,EAAE,MAAM;CACV,CAAC,CAAC","file":"app.js","sourcesContent":["'use strict';\n\nconst Vue = require('vue');\n\nnew Vue({\n\t// the root element that will be compiled\n\tel: '.app'\n});"]}

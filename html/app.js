@@ -38,15 +38,13 @@ new Vue({
 
 		fetchSpreadsheets: function()
 		{
-			$.ajax({
-				type: "POST",
-				url: "http://localhost:3412/parse",
-				data: {data: this.ids},
-				xhrFields: {
-					withCredentials: true
-				}
-			});
+			//$.ajax({
+			//	type: "POST",
+			//	url: "http://localhost:3412/parse",
+			//	data: {data: this.ids}
+			//});
 			//location.href = 'http://localhost:3412/parse/' + this.ids.map((value) => value.id).join(',');
+			location.href = 'http://localhost:3412/parse/' + JSON.stringify(this.ids);
 		},
 
 		remove: function(sp)
