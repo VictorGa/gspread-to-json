@@ -84,14 +84,38 @@ In this example, the objects in `test2` tab will be placed in `test3` tab linked
 
 You can run a node server (node build/server.js) to get access to RESTful API:
 
-parse/:spreadsheetId --> Download a zip file with all json files related with that spreadsheet.
+- `parse/`
+ You can send a stringified array as [{id: 'spreadsheetId' name: 'spreadsheetName'}]
+
+# HTML client
+
+You can use already the html client. Add as many spreadsheet ids you want and set a name.
+Node server must be running:
+
+**npm run server**
+
+Run web watcher:
+
+**npm run build-web**
+
+Set the right HOST in html/app:
+
+```javascript
+	const HOST = "http://localhost:3412/";
+```
+
+![alt tag](https://raw.githubusercontent.com/VictorGa/gspread-to-json/master/docs/web.png)
 
 # Contributing
 
 You are more than welcome to contribute to this project.
 Please keep in mind that all unit tests should pass.
 
+# TODO
 
+- `Improve error handling`
+- `Allow download based on config file`
+- `Allow to access to spreadsheet list in Google account`
 
 
 

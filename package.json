@@ -5,11 +5,10 @@
   "main": "main.js",
   "scripts": {
     "build": "babel --source-maps --out-dir build develop",
-    "build-html": "babel --source-maps --out-dir build/html html",
     "start": "node build/app.js",
     "server": "node build/server.js",
     "test": "mocha tests/unit --compilers js:babel/register --recursive",
-    "watch": "watchify html/app.js -t babelify -o html/app.bundle.js --verbose --debug"
+    "build-web": "watchify html/app.js -t babelify -o html/app.bundle.js --verbose --debug"
   },
   "author": "",
   "license": "Victor Garrido",
