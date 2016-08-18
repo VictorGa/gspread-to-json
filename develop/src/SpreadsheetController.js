@@ -9,7 +9,7 @@ var Promise = require('native-or-bluebird');
  */
 class SpreadsheetController {
 	constructor (id, name, onReady) {
-		this._incompatibleTags = ['_links', 'save', 'del', 'content', '_xml'];
+		this._incompatibleTags = ['_links', 'save', 'del', 'content', '_xml', 'app:edited', 'reference'];
 
 		this.sheet = new GoogleSpreadsheet(id);
 		this.sheet.useServiceAccountAuth(config.googleauth, this.init.bind(this, onReady));
@@ -29,7 +29,7 @@ class SpreadsheetController {
 			let iterables = this.data.worksheets.map((element, index) => {
 				return this.getRow(element, clean);
 			});
-
+			
 			Promise.all(iterables).then(
 				results => {
 					//results is an array of objects, each object being a worksheet
@@ -86,7 +86,6 @@ class SpreadsheetController {
 					}
 				}
 			}
-
 			filtered.push(filteredRow);
 		}
 
@@ -134,7 +133,6 @@ export function fecthSpreadsheet (spId, name, cleanSpaces = true) {
 export function loadSpreadsheets (list) {
 
 	let metadata = [];
-	console.log(list);
 
 	list.forEach(spreadsheet => {
 		metadata.push(fecthSpreadsheet(spreadsheet.id, spreadsheet.name, JSON.parse(spreadsheet.cleanSpaces)));

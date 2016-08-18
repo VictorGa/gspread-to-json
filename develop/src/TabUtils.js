@@ -4,6 +4,7 @@ import {parse} from './Tokenizer';
 
 const dictKey = '__dict';
 const objParseKey = '__obj_parse';
+const objFormatKey = '__obj_format';
 
 /**
  * For each row parse content applying rules
@@ -44,14 +45,28 @@ export function convertRowToDict (parent, row) {
 export function parseTab (spreadsheet, tab) {
 	let isDict = tab.indexOf(dictKey) !== -1;
 	let isObjParse = tab.indexOf(objParseKey) !== -1;
+	let isObjParseFormat = tab.indexOf(objFormatKey) !== -1;
 	let rows;
 	let localizedRows = {};
 
 	//In case is a object should be deepened
 	//Just couples of id-copy
-	if (isObjParse) {
+	if (isObjParse || isObjParseFormat) {
 		rows = {};
-		spreadsheet[tab].rows.forEach(row => Parsers.deepen(row.id, row.value, rows));
+		spreadsheet[tab].rows.forEach(row =>
+		{
+			console.log('output row', spreadsheet[tab]);
+			Parsers.deepen(row.id, row.value, rows)
+		});
+
+		if(isObjParseFormat)
+		{
+			Object.keys(rows).forEach(key =>
+			{
+				rows[key] = parse(rows[key]);
+			});
+		}
+
 	}
 	else {
 		Object.keys(spreadsheet[tab].locales)

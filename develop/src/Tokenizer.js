@@ -49,7 +49,6 @@ export function parse(element)
 {
 	let parsed = Object.keys(Regexs).
 				map(Tokenizer.discoverRegex.bind(this, element, Regexs)).
-				filter(({regexName}) => typeof regexName !== 'undefined').
 				map(Tokenizer.parseElementByRegex.bind(this));
 
 	if(parsed.length === 0)
